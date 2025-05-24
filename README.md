@@ -16,7 +16,7 @@ Uma plataforma exclusiva para a compra e venda de roupas, oferecendo uma experi�
 
 ## 📊 Estatísticas do Projeto
 
-![GitHub repo stats](https://github-readme-stats.vercel.app/api/pin/?username=SEU_USUARIO&repo=NOME_DO_REPOSITORIO&theme=dark)
+![GitHub repo stats](https://github-readme-stats.vercel.app/api/pin/?username=InstMente&repo=BreShop-Web&theme=dark)
 
 
 ## Requisitos Funcionais
