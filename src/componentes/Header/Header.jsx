@@ -19,8 +19,7 @@ function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const paginasOcultas = ['/', '/cadastro'];
-  const logado = true; // Altere para false para simular usuário não logado
-
+  const logado = true;
   const sair = (text) => {
     if (text === 'Sair') {
       navigate('/');

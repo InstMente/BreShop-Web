@@ -14,7 +14,7 @@ import {
     Stack
 } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
-
+import SearchIcon from '@mui/icons-material/Search';
 const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -69,7 +69,12 @@ function PaginaInicial() {
             <Header />
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
-                    <TextField sx={{ width: '650px' }} id="outlined-search" label="Pesquisar" type="search" />
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <TextField sx={{ width: '650px', borderTopRightRadius: 0, borderBottomRightRadius: 0, '& fieldset': { borderTopRightRadius: 0, borderBottomRightRadius: 0 } }} id="outlined-search" label="Pesquisar" type="search" />
+                        <Box sx={{ backgroundColor: '#003566', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', borderTopRightRadius: '8px', borderBottomRightRadius: '8px', width: 50, height: 56, cursor: 'pointer' }}>
+                            <SearchIcon />
+                        </Box>
+                    </Box>
                 </Container>
 
                 <SpeedDial
