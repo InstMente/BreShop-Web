@@ -31,12 +31,6 @@ function PaginaCadastro() {
                         <TextField
                             required
                             id="outlined-required"
-                            label="Email:"
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            id="outlined-required"
                             type='number'
                             label="Telefone:"
                             sx={{ width: '300px' }}

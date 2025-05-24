@@ -5,24 +5,37 @@ import {
   Drawer,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Badge,
+  Button
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const location = useLocation();
-  const paginasOcultas = ['/', '/cadastro'];
-
   const navigate = useNavigate();
+  const paginasOcultas = ['/', '/cadastro'];
+  const logado = true; // Altere para false para simular usuário não logado
 
-const sair = (text) => {
-  if (text === 'Sair') {
-    navigate('/');
-  }
-};
+  const sair = (text) => {
+    if (text === 'Sair') {
+      navigate('/');
+    }
+  };
+  const meusAnuncios = (text) => {
+    if (text === 'Meus Anuncios') {
+      navigate('/meusAnuncio');
+    }
+  };
+  const registroVendas = (text) => {
+    if (text === 'Registro de Vendas') {
+      navigate('/registroVendas');
+    }
+  };
 
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
@@ -56,19 +69,34 @@ const sair = (text) => {
 
         {mostrarPerfilEMenu && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box
-              component="img"
-              src="/user.png"
-              alt="Usuário"
-              sx={{ height: 40 }}
-            />
-
-            <IconButton
-              onClick={toggleDrawer(true)}
-              sx={{ color: 'white', p: 3 }}
-            >
-              <MenuIcon sx={{ fontSize: 34 }} />
-            </IconButton>
+            {logado ? (
+              <>
+                <Badge badgeContent={3} color="error">
+                  <ShoppingCartIcon sx={{ color: 'whitesmoke' }} />
+                </Badge>
+                <IconButton
+                  onClick={toggleDrawer(true)}
+                  sx={{ color: 'white', mr: 2, transition: 'all 0.3s ease-in-out' }}
+                >
+                  <MenuIcon sx={{ fontSize: 34, transition: 'all 0.3s ease-in-out' }} />
+                </IconButton>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={() => navigate('/')}
+                  sx={{ color: 'white', border: '1px solid white', borderRadius: 2 }}
+                >
+                  Entrar
+                </Button>
+                <Button
+                  onClick={() => navigate('/cadastro')}
+                  sx={{ color: 'white', border: '1px solid white', borderRadius: 2 }}
+                >
+                  Cadastrar
+                </Button>
+              </>
+            )}
           </Box>
         )}
       </Box>
@@ -87,6 +115,7 @@ const sair = (text) => {
             borderRadius: '20px',
             boxSizing: 'border-box',
             p: 2,
+            transition: 'all 0.3s ease-in-out'
           },
         }}
       >
@@ -95,10 +124,16 @@ const sair = (text) => {
             <ListItem
               button
               key={text}
-              onClick={() => sair(text)}
+              onClick={() => {
+                if (text === 'Sair') sair(text);
+                if (text === 'Meus Anuncios') meusAnuncios(text);
+                if (text === 'Registro de Vendas') registroVendas(text);
+              }}
               sx={{
                 borderRadius: '8px',
                 bgcolor: '#f5f5f5',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease-in-out',
                 '&:hover': {
                   bgcolor: '#e0e0e0',
                 },
