@@ -8,7 +8,9 @@ function PaginaAnuncio() {
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden' }}>
             <Header />
             <Box sx={{ flexGrow: 1, p: 3 }}>
-                <Container maxWidth='lg' sx={{ display: 'flex', justifyContent: 'center', p: 5 }}>
+                <Container maxWidth='lg' sx={{ display: 'flex', justifyContent: 'center', p: 5 
+
+                }}>
 
                 </Container>
             </Box>
