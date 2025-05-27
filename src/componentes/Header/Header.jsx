@@ -35,6 +35,11 @@ function Header() {
       navigate('/registroVendas');
     }
   };
+  const minhaConta = (text) => {
+    if (text === 'Minha Conta') {
+      navigate('/minhaConta');
+    }
+  };
 
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
@@ -127,6 +132,7 @@ function Header() {
                 if (text === 'Sair') sair(text);
                 if (text === 'Meus Anuncios') meusAnuncios(text);
                 if (text === 'Registro de Vendas') registroVendas(text);
+                if (text === 'Minha Conta') minhaConta(text);
               }}
               sx={{
                 borderRadius: '8px',

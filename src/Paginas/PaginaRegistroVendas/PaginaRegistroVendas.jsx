@@ -18,22 +18,18 @@ function PaginaRegistroVendas() {
           <Typography variant="h5" sx={{ fontWeight: 70 }}>Voltar</Typography>
         </Box>
 
-        <Container sx={{ mt: 2, width: '100vw', height: '60vh', display: 'flex', justifyContent: 'center', background: 'linear-gradient(195deg, #003566 50%,rgb(43, 36, 33) 100%)', borderRadius: '16px' }}>
+        <Container sx={{ mt: 2, width: '100vw', height: '50vh', display: 'flex', justifyContent: 'center', background: 'linear-gradient(195deg, #003566 50%,rgb(43, 36, 33) 100%)', borderRadius: '16px' }}>
           <Box
             component='img'
             src="/image.png"
-            sx={{ height: '250px', marginTop: '3%', marginRight: 20 }}
+            sx={{ height: '290px', marginTop: '7%', marginRight: 5 }}
           />
-          <Box p={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box  sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column' }}>
               <TextField disabled label='Titulo:' type="text" sx={{ backgroundColor: 'white', width: '40vw', borderRadius: '12px' }} />
               <TextField disabled label='Descrição:' type="text" sx={{ backgroundColor: 'white', width: '40vw', borderRadius: '12px' }} />
               <TextField disabled label="Preço:" type="number" sx={{ backgroundColor: 'white', width: '40vw', borderRadius: '12px' }} />
               <TextField disabled label="Comprador:" type="text" sx={{ backgroundColor: 'white', width: '40vw', borderRadius: '12px' }} />
-              <Stack direction="row" spacing={2} justifyContent="center">
-                <Button sx={{ width: '10vw', backgroundColor: '#CC5500', color: 'white', p: 1 }}>Editar</Button>
-                <Button sx={{ width: '10vw', backgroundColor: 'rgba(240, 15, 15, 0.81)', color: 'white', p: 1 }}>DELETAR</Button>
-              </Stack>
             </Stack>
           </Box>
         </Container>

@@ -24,7 +24,8 @@ const modalStyle = {
     bgcolor: '#fff',
     borderRadius: 2,
     boxShadow: 24,
-    p: 4,
+    p: 5,
+    backgroundColor:'#003566'
 };
 
 function PaginaInicial() {
@@ -111,7 +112,8 @@ function PaginaInicial() {
                                 justifyContent: 'center',
                                 fontFamily: 'Montserrat, sans-serif',
                                 fontWeight: '800',
-                                color: "#003566"
+                                color: "white",
+                                fontSize:'35px'
                             }}
                             mb={2}
                         >
@@ -124,6 +126,7 @@ function PaginaInicial() {
                                 onChange={(e) => setTitulo(e.target.value)}
                                 fullWidth
                                 required
+                                sx={{backgroundColor:'white'}}
                             />
                             <TextField
                                 label="Descrição"
@@ -133,6 +136,7 @@ function PaginaInicial() {
                                 onChange={(e) => setDescricao(e.target.value)}
                                 fullWidth
                                 required
+                                sx={{backgroundColor:'white'}}
                             />
                             <TextField
                                 label="Valor (R$)"
@@ -141,10 +145,11 @@ function PaginaInicial() {
                                 onChange={(e) => setValor(e.target.value)}
                                 fullWidth
                                 required
+                                sx={{backgroundColor:'white'}}
                             />
-                            <Button variant="contained" component="label" sx={{ backgroundColor: '#003566' }}>
+                            <Button variant="contained" component="label" sx={{ backgroundColor: 'white', color:'#003566', fontSize:'17px' }}>
                                 Upload de Imagem
-                                <input type="file" hidden accept="image/*" onChange={handleImagemChange} />
+                                <input type="file" hidden accept="image/*" onChange={handleImagemChange}/>
                             </Button>
 
                             {preview && (
@@ -156,7 +161,7 @@ function PaginaInicial() {
                                 />
                             )}
 
-                            <Button type="submit" variant="contained" sx={{ backgroundColor: '#003566' }}>
+                            <Button type="submit" variant="contained" sx={{ backgroundColor: 'white', color:'#003566', fontSize:'17px' }}>
                                 Cadastrar
                             </Button>
                         </Stack>

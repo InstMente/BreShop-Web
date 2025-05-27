@@ -1,6 +1,6 @@
 import { Stack, Box, Typography, Link } from '@mui/material';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import GitHub from '@mui/icons-material/GitHub'; // Importação corrigida
+import GitHub from '@mui/icons-material/GitHub'; 
 
 function Footer() {
     return (
