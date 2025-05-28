@@ -24,7 +24,7 @@ function PaginaRegistroVendas() {
             src="/image.png"
             sx={{ height: '290px', marginTop: '7%', marginRight: 5 }}
           />
-          <Box  sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column' }}>
               <TextField disabled label='Titulo:' type="text" sx={{ backgroundColor: 'white', width: '40vw', borderRadius: '12px' }} />
               <TextField disabled label='Descrição:' type="text" sx={{ backgroundColor: 'white', width: '40vw', borderRadius: '12px' }} />

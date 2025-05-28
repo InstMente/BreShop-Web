@@ -25,7 +25,7 @@ const modalStyle = {
     borderRadius: 2,
     boxShadow: 24,
     p: 5,
-    backgroundColor:'#003566'
+    backgroundColor: '#003566'
 };
 
 function PaginaInicial() {
@@ -36,6 +36,17 @@ function PaginaInicial() {
     const [imagem, setImagem] = useState(null);
     const [preview, setPreview] = useState(null);
 
+    let JSON = JSON.stringify(aux);
+
+
+    window.localStorage.setItem('tarefa', JSON);
+
+    let usuario = window.localStorage.getItem('Usuarios');
+
+    // Converte este json para objeto
+    let listaUsuario = JSON.parse(usuario);
+
+    console.log(listaUsuario.id)
     const actions = [
         { icon: <FileCopyIcon />, name: 'Cadastrar Anúncio', onClick: () => setOpenModal(true) }
     ];
@@ -54,6 +65,7 @@ function PaginaInicial() {
         }
     };
 
+    console.log(tarefa.id);
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log({ titulo, descricao, valor, imagem });
@@ -113,7 +125,7 @@ function PaginaInicial() {
                                 fontFamily: 'Montserrat, sans-serif',
                                 fontWeight: '800',
                                 color: "white",
-                                fontSize:'35px'
+                                fontSize: '35px'
                             }}
                             mb={2}
                         >
@@ -126,7 +138,7 @@ function PaginaInicial() {
                                 onChange={(e) => setTitulo(e.target.value)}
                                 fullWidth
                                 required
-                                sx={{backgroundColor:'white'}}
+                                sx={{ backgroundColor: 'white' }}
                             />
                             <TextField
                                 label="Descrição"
@@ -136,7 +148,7 @@ function PaginaInicial() {
                                 onChange={(e) => setDescricao(e.target.value)}
                                 fullWidth
                                 required
-                                sx={{backgroundColor:'white'}}
+                                sx={{ backgroundColor: 'white' }}
                             />
                             <TextField
                                 label="Valor (R$)"
@@ -145,11 +157,11 @@ function PaginaInicial() {
                                 onChange={(e) => setValor(e.target.value)}
                                 fullWidth
                                 required
-                                sx={{backgroundColor:'white'}}
+                                sx={{ backgroundColor: 'white' }}
                             />
-                            <Button variant="contained" component="label" sx={{ backgroundColor: 'white', color:'#003566', fontSize:'17px' }}>
+                            <Button variant="contained" component="label" sx={{ backgroundColor: 'white', color: '#003566', fontSize: '17px' }}>
                                 Upload de Imagem
-                                <input type="file" hidden accept="image/*" onChange={handleImagemChange}/>
+                                <input type="file" hidden accept="image/*" onChange={handleImagemChange} />
                             </Button>
 
                             {preview && (
@@ -161,7 +173,7 @@ function PaginaInicial() {
                                 />
                             )}
 
-                            <Button type="submit" variant="contained" sx={{ backgroundColor: 'white', color:'#003566', fontSize:'17px' }}>
+                            <Button type="submit" variant="contained" sx={{ backgroundColor: 'white', color: '#003566', fontSize: '17px' }}>
                                 Cadastrar
                             </Button>
                         </Stack>

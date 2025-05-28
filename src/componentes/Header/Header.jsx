@@ -15,10 +15,10 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function Header() {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [open, setDrawerOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const paginasOcultas = ['/', '/cadastro'];
+  const paginasOcultas = ['/', '/cadastro', '/recuperacaoSenha'];
   const logado = true;
   const sair = (text) => {
     if (text === 'Sair') {
@@ -41,8 +41,8 @@ function Header() {
     }
   };
 
-  const toggleDrawer = (open) => () => {
-    setDrawerOpen(open);
+  const toggleDrawer = () => {
+    setDrawerOpen(!open);
   };
 
   const mostrarPerfilEMenu = !paginasOcultas.includes(location.pathname);
@@ -79,10 +79,11 @@ function Header() {
                   <ShoppingCartIcon sx={{ color: 'whitesmoke' }} />
                 </Badge>
                 <IconButton
-                  onClick={toggleDrawer(true)}
+                  onClick={toggleDrawer}
                   sx={{ color: 'white', mr: 2, transition: 'all 0.3s ease-in-out' }}
-                >
+                  >
                   <MenuIcon sx={{ fontSize: 34, transition: 'all 0.3s ease-in-out' }} />
+                  
                 </IconButton>
               </>
             ) : (
@@ -109,40 +110,41 @@ function Header() {
 
       <Drawer
         anchor="right"
-        open={drawerOpen}
-        onClose={toggleDrawer(false)}
+        open={open}
+        onClose={toggleDrawer}
         PaperProps={{
           sx: {
-            mt: '70px',
+            mt: '80px',
             width: '250px',
-            height: '90vh',
-            borderRadius: '20px',
+            height: '30vh',
+            borderRadius: '1px 1px 1px 20px',
             boxSizing: 'border-box',
             p: 2,
             transition: 'all 0.3s ease-in-out'
           },
         }}
-      >
+        >
         <List sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {['Minha Conta', 'Registro de Vendas', 'Meus Anuncios', 'Sair'].map((text) => (
             <ListItem
-              button
-              key={text}
-              onClick={() => {
-                if (text === 'Sair') sair(text);
-                if (text === 'Meus Anuncios') meusAnuncios(text);
-                if (text === 'Registro de Vendas') registroVendas(text);
-                if (text === 'Minha Conta') minhaConta(text);
-              }}
-              sx={{
-                borderRadius: '8px',
-                bgcolor: '#f5f5f5',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease-in-out',
-                '&:hover': {
-                  bgcolor: '#e0e0e0',
-                },
-              }}
+            button
+            key={text}
+            onClick={() => {
+              
+              if (text === 'Sair') sair(text);
+              if (text === 'Meus Anuncios') meusAnuncios(text);
+              if (text === 'Registro de Vendas') registroVendas(text);
+              if (text === 'Minha Conta') minhaConta(text);
+            }}
+            sx={{
+              borderRadius: '8px',
+              bgcolor: '#f5f5f5',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease-in-out',
+              '&:hover': {
+                bgcolor: '#e0e0e0',
+              },
+            }}
             >
               <ListItemText primary={text} />
             </ListItem>
@@ -151,6 +153,7 @@ function Header() {
       </Drawer>
     </>
   );
+  
 }
 
 export default Header;

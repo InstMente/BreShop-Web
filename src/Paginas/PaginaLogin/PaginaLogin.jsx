@@ -1,4 +1,4 @@
-import { Box, Button, Container, Link, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material'
 import Header from '../../componentes/Header/Header'
 import Footer from '../../componentes/Footer/Footer'
 
@@ -11,7 +11,7 @@ function PaginaLogin() {
                     width: '400px',
                     backgroundColor: '#F2F0EF',
                     boxShadow: '4px 4px 4px 4px solid black',
-                    borderRadius: '10px',
+                    borderRadius: '10px'
                 }}>
                     <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 4 }}>
                         <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: '800', color: "#003566" }}>LOGIN</h1>

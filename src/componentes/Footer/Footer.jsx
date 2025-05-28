@@ -19,7 +19,7 @@ function Footer() {
                 }}
             >
                 <Typography variant="body2" p={3}>
-                    © 2025 BreShop e-commerce. Todos os direitos reservados.
+                    © 2025 BreShop E-commerce. Todos os direitos reservados.
                 </Typography>
 
                 <Box sx={{ display: 'flex', gap: 2 }}>

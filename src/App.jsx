@@ -5,6 +5,8 @@ import PaginaCadastro from "./Paginas/PaginaCadastro/PaginaCadastro"
 import PaginaMeusAnuncio from "./Paginas/PaginaMeusAnuncios/PaginaMeusAnuncios"
 import PaginaRegistroVendas from "./Paginas/PaginaRegistroVendas/PaginaRegistroVendas"
 import PaginaPerfil from "./Paginas/PaginaPerfil/PaginaPerfil"
+import PaginaAnuncio from "./Paginas/PaginaAnuncio/PaginaAnuncio"
+import PaginaRecuperarSenha from "./Paginas/PaginaRecuperarSenha/PaginaRecuperarSenha"
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Route path="/meusAnuncio" element={<PaginaMeusAnuncio />}/>
         <Route path="/registroVendas" element={<PaginaRegistroVendas />}/>
         <Route path="/minhaConta" element={<PaginaPerfil />}/>
+        <Route path="/anuncio" element={<PaginaAnuncio />}/>
+        <Route path="/recuperacaoSenha" element={<PaginaRecuperarSenha />}/>
       </Routes>
       </Router>
     </>
