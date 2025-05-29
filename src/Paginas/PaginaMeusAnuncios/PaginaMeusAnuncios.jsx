@@ -11,13 +11,24 @@ function PaginaMeusAnuncio() {
       <Header />
       <Box flexGrow={1}>
 
-        <Box sx={{ mt: 3, display: 'flex', flexDirection: 'row', alignItems: 'center', textAlign: 'center' }}>
-          <ArrowBackIosNewIcon
-            onClick={() => navigate('/home')}
-            sx={{ ml: 2, color: '#003566', fontSize: '25px', mr: 1 }}
-          />
-          <Typography variant="h5" sx={{ fontWeight: 70 }}>Voltar</Typography>
-        </Box>
+      <Button
+                sx={{
+                    width: '7%',
+                    top: 20,
+                    left: 20,
+                    color: '#003566',
+                    p: 1.2,
+                    borderRadius: '8px',
+                    zIndex: 10
+                }}
+                onClick={() => navigate('/home')}
+            >
+                <ArrowBackIosNewIcon
+                    onClick={() => navigate('/home')}
+                    sx={{ ml: 2, color: '#003566', fontSize: '25px', mr: 1 }}
+                />
+                Voltar
+            </Button>
 
         <Container sx={{ mt: 2, width: '100vw', height: '50vh', display: 'flex', justifyContent: 'center', background: 'linear-gradient(195deg, #003566 50%,rgb(43, 36, 33) 100%)', borderRadius: '16px' }}>
 

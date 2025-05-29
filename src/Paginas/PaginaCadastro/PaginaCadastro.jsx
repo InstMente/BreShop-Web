@@ -28,6 +28,23 @@ function PaginaCadastro() {
             return;
         }
 
+        const usuariosExistentes = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+        const usuarioExistente = usuariosExistentes.find(
+            (u) => u.usuario === usuario || u.email === email || u.cpf === cpf
+        );
+
+        if (usuarioExistente) {
+            if (usuarioExistente.usuario === usuario) {
+                alert('Nome de usuário já cadastrado!');
+            } else if (usuarioExistente.email === email) {
+                alert('Email já cadastrado!');
+            } else if (usuarioExistente.cpf === cpf) {
+                alert('CPF já cadastrado!');
+            }
+            return;
+        }
+
         const novoUsuario = {
             id: Date.now(),
             usuario,
@@ -43,7 +60,6 @@ function PaginaCadastro() {
             senha
         };
 
-        const usuariosExistentes = JSON.parse(localStorage.getItem('usuarios')) || [];
         localStorage.setItem('usuarios', JSON.stringify([...usuariosExistentes, novoUsuario]));
 
         alert('Cadastro realizado com sucesso!');
@@ -69,7 +85,7 @@ function PaginaCadastro() {
                 <Container sx={{
                     width: '400px',
                     backgroundColor: '#F2F0EF',
-                    boxShadow: '4px 4px 4px 4px solid black',
+                    boxShadow: '4px 4px 4px rgba(0,0,0,0.1)',
                     borderRadius: '10px',
                 }}>
                     <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 4 }}>
