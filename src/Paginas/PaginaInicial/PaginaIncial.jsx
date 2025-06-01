@@ -15,7 +15,9 @@ import {
     CardMedia,
     CardContent,
     Grid,
-    Modal
+    Modal,
+    Chip,
+    Divider
 } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SearchIcon from '@mui/icons-material/Search';
@@ -27,10 +29,10 @@ const modalStyle = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    backgroundColor: 'white',
+    bgcolor: 'background.paper',
     borderRadius: 2,
     boxShadow: 24,
-    p: 5,
+    p: 4,
 };
 
 function PaginaInicial() {
@@ -96,100 +98,144 @@ function PaginaInicial() {
     );
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#ebebeb', overflowX: 'hidden' }}>
             <Header />
             <Box sx={{ flexGrow: 1, p: 3 }}>
-                <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', p: 5, flexDirection: 'column', gap: 4 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: 4 }}>
+                    {/* Barra de Pesquisa - Estilo Mercado Livre */}
+                    <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        backgroundColor: '#fff',
+                        borderRadius: '4px',
+                        boxShadow: '0 1px 2px 0 rgba(0,0,0,.1)',
+                        overflow: 'hidden'
+                    }}>
                         <TextField
-                            sx={{ width: '100%', borderTopRightRadius: 0, borderBottomRightRadius: 0, '& fieldset': { borderTopRightRadius: 0, borderBottomRightRadius: 0 } }}
-                            id="outlined-search"
-                            label="Pesquisar"
-                            type="search"
+                            fullWidth
+                            variant="outlined"
+                            placeholder="Buscar produtos, marcas e muito mais..."
+                            InputProps={{
+                                sx: {
+                                    '& fieldset': { border: 'none' },
+                                    height: '48px'
+                                }
+                            }}
                             value={termoPesquisa}
                             onChange={(e) => setTermoPesquisa(e.target.value)}
                         />
-                        <Box
+                        <Button
                             sx={{
+                                height: '48px',
+                                minWidth: '46px',
                                 backgroundColor: '#003566',
-                                color: 'white',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                borderTopRightRadius: '8px',
-                                borderBottomRightRadius: '8px',
-                                width: 50,
-                                height: 56,
-                                cursor: 'pointer'
+                                color: '#fff',
+                                borderLeft: '1px solid #eee',
+                                borderRadius: 0,
+                                '&:hover': {
+                                    backgroundColor:'hsl(219, 68.50%, 36.10%)'
+                                }
                             }}
                         >
                             <SearchIcon />
-                        </Box>
+                        </Button>
                     </Box>
 
+                    {/* Listagem de Anúncios - Estilo Mercado Livre */}
                     <Grid container spacing={3}>
                         {anunciosFiltrados.map((anuncio) => (
-                            <Grid item key={anuncio.id} size={3}>
-                                <Card sx={{ width: '100%', minHeight: 450, display: 'flex', flexDirection: 'column', justifyContent: 'space-around', backgroundColor: 'ButtonShadow', borderRadius: '16px', boxShadow: '0.5px 0.5px 3px 1px rgba(0, 0, 1, 1)' }}>
-                                    {anuncio.imagem && (
-                                        <CardMedia
-                                            component="img"
-                                            height={200}
-                                            image={anuncio.imagem}
-                                            alt={anuncio.titulo}
-                                            sx={{
-                                                borderRadius: 2,
-                                                margin: '16px auto 8px',
-                                                display: 'block',
-                                                objectFit: 'cover',
-                                                backgroundColor: '#fff',
-                                                width: '90%',
-                                                maxWidth: 300,
-                                                maxHeight: 200
-                                            }}
-                                        />
-                                    )}
-                                    <CardContent sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                                        <Stack spacing={2} sx={{ color: '#003566' }}>
-                                            <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                            <Grid item xs={12} sm={6} md={4} lg={3} size={3} key={anuncio.id}>
+                                <Card 
+                                    sx={{ 
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        backgroundColor: '#fff',
+                                        borderRadius: '4px',
+                                        boxShadow: '0 1px 1px 0 rgba(0,0,0,.1)',
+                                        transition: 'box-shadow .3s',
+                                        '&:hover': {
+                                            boxShadow: '0 7px 11px 0 rgba(0,0,0,.1)'
+                                        },
+                                        cursor: 'pointer'
+                                    }}
+                                    onClick={() => navigate('/anuncio', { state: { anuncio } })}
+                                >
+                                    <Box sx={{ p: 2, flexGrow: 1 }}>
+                                        {anuncio.imagem && (
+                                            <CardMedia
+                                                component="img"
+                                                image={anuncio.imagem}
+                                                alt={anuncio.titulo}
+                                                sx={{
+                                                    width: '100%',
+                                                    height: '160px',
+                                                    objectFit: 'contain',
+                                                    margin: '0 auto'
+                                                }}
+                                            />
+                                        )}
+                                        <CardContent sx={{ p: 0, pt: 2 }}>
+                                            <Typography 
+                                                variant="body1" 
+                                                sx={{ 
+                                                    fontSize: '14px',
+                                                    color: '#333',
+                                                    mb: 1,
+                                                    height: '36px',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: 'vertical'
+                                                }}
+                                            >
                                                 {anuncio.titulo}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" sx={{ mb: 1, wordBreak: 'break-word' }}>
-                                                {anuncio.descricao.length > 20 ? anuncio.descricao.slice(0, 20) + '...' : anuncio.descricao}
-                                            </Typography>
-                                            <Typography>
+                                            <Typography 
+                                                variant="h6" 
+                                                sx={{ 
+                                                    fontSize: '24px',
+                                                    fontWeight: '400',
+                                                    color: '#333',
+                                                    mb: 1
+                                                }}
+                                            >
                                                 {`R$ ${Number(anuncio.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                             </Typography>
-                                            <Button
-                                                variant="contained"
-                                                size="small"
-                                                sx={{ width: '100%', p: 1, backgroundColor: '#00509d', '&:hover': { backgroundColor: '#003566' } }}
-                                                onClick={() => navigate('/anuncio', { state: { anuncio } })}
-                                            >
-                                                Ver Detalhes
-                                            </Button>
-
-                                        </Stack>
-                                    </CardContent>
+                                            <Chip 
+                                                label="Frete grátis" 
+                                                size="small" 
+                                                sx={{ 
+                                                    backgroundColor: '#00a650',
+                                                    color: '#fff',
+                                                    fontSize: '12px',
+                                                    height: '20px'
+                                                }} 
+                                            />
+                                        </CardContent>
+                                    </Box>
                                 </Card>
                             </Grid>
                         ))}
                     </Grid>
                 </Container>
 
+                {/* Botão Flutuante - Estilo Mercado Livre */}
                 <SpeedDial
                     ariaLabel="Menu rápido"
-                    sx={{ position: 'fixed', bottom: 120, right: 25 }}
-                    icon={<SpeedDialIcon />}
-                    FabProps={{
-                        sx: {
+                    sx={{ 
+                        position: 'fixed', 
+                        bottom: 32, 
+                        right: 32,
+                        '& .MuiSpeedDial-fab': {
                             backgroundColor: '#003566',
-                            color: 'white',
                             '&:hover': {
-                                backgroundColor: '#00264d'
+                                backgroundColor:'rgb(23, 62, 121)'
                             }
                         }
                     }}
+                    icon={<SpeedDialIcon />}
                 >
                     {actions.map((action) => (
                         <SpeedDialAction
@@ -197,29 +243,103 @@ function PaginaInicial() {
                             icon={action.icon}
                             tooltipTitle={action.name}
                             onClick={action.onClick}
-                            sx={{ backgroundColor: '#003566', color: 'white' }}
+                            FabProps={{
+                                sx: {
+                                    backgroundColor: '#003566',
+                                    color: '#fff',
+                                    '&:hover': {
+                                        backgroundColor:'rgb(23, 62, 121)'
+                                    }
+                                }
+                            }}
                         />
                     ))}
                 </SpeedDial>
 
+                {/* Modal de Cadastro - Estilo Mercado Livre */}
                 <Modal open={openModal} onClose={() => setOpenModal(false)}>
                     <Box component="form" onSubmit={handleSubmit} sx={modalStyle}>
-                        <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center', fontFamily: 'Montserrat, sans-serif', fontWeight: '800', fontSize: '35px', mb: 2, color:'#003566' }}>
-                            Cadastrar Anúncio
+                        <Typography 
+                            variant="h5" 
+                            sx={{ 
+                                mb: 3,
+                                color: '#003566',
+                                fontWeight: '600',
+                                textAlign: 'center'
+                            }}
+                        >
+                            Publicar novo anúncio
                         </Typography>
                         <Stack spacing={2}>
-                            <TextField label="Título" value={titulo} onChange={(e) => setTitulo(e.target.value)} fullWidth required sx={{}} />
-                            <TextField label="Descrição" multiline rows={3} value={descricao} onChange={(e) => setDescricao(e.target.value)} fullWidth required sx={{  }} />
-                            <TextField label="Valor (R$)" type="number" value={valor} onChange={(e) => setValor(e.target.value)} fullWidth required sx={{  }} />
-                            <Button variant="contained" component="label" sx={{ color: 'white', fontSize: '17px' }}>
-                                Upload de Imagem
+                            <TextField 
+                                label="Título do anúncio" 
+                                value={titulo} 
+                                onChange={(e) => setTitulo(e.target.value)} 
+                                fullWidth 
+                                required 
+                            />
+                            <TextField 
+                                label="Descrição" 
+                                multiline 
+                                rows={3} 
+                                value={descricao} 
+                                onChange={(e) => setDescricao(e.target.value)} 
+                                fullWidth 
+                                required 
+                            />
+                            <TextField 
+                                label="Preço (R$)" 
+                                type="number" 
+                                value={valor} 
+                                onChange={(e) => setValor(e.target.value)} 
+                                fullWidth 
+                                required 
+                                InputProps={{
+                                    startAdornment: (
+                                        <Typography sx={{ mr: 1, color: 'text.secondary' }}>R$</Typography>
+                                    )
+                                }}
+                            />
+                            <Button 
+                                variant="outlined" 
+                                component="label"
+                                sx={{
+                                    backgroundColor: '#003566',
+                                    color: '#fff',
+                                    border:'none',
+                                    '&:hover': {
+                                        backgroundColor:'rgb(25, 64, 122)'
+                                    }
+                                }}
+                            >
+                                Adicionar fotos
                                 <input type="file" hidden accept="image/*" onChange={handleImagemChange} />
                             </Button>
                             {preview && (
-                                <Box component="img" src={preview} alt="Pré-visualização da imagem" sx={{ width: '100%', maxHeight: 200, objectFit: 'contain', borderRadius: 2 }} />
+                                <Box 
+                                    component="img" 
+                                    src={preview} 
+                                    alt="Pré-visualização" 
+                                    sx={{ 
+                                        width: '100%', 
+                                        maxHeight: 200, 
+                                        objectFit: 'contain', 
+                                        borderRadius: 1,
+                                        border: '1px solid #eee'
+                                    }} 
+                                />
                             )}
-                            <Button type="submit" variant="contained" sx={{ backgroundColor: '#003566', color: 'white', fontSize: '17px' }}>
-                                Cadastrar
+                            <Button 
+                                type="submit" 
+                                variant="contained"
+                                sx={{
+                                    backgroundColor:'rgb(47, 115, 179)',
+                                    '&:hover': {
+                                        backgroundColor: 'rgb(25, 64,122)'
+                                    }
+                                }}
+                            >
+                                Publicar anúncio
                             </Button>
                         </Stack>
                     </Box>
