@@ -203,7 +203,7 @@ function PaginaAnuncio() {
                                         }
                                     }}
                                 >
-                                    Comprar agora
+                                    Adcionar ao carrinho
                                 </Button>
                             </Box>
                         </Box>

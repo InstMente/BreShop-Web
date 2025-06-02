@@ -103,8 +103,8 @@ function PaginaInicial() {
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: 4 }}>
                     {/* Barra de Pesquisa - Estilo Mercado Livre */}
-                    <Box sx={{ 
-                        display: 'flex', 
+                    <Box sx={{
+                        display: 'flex',
                         alignItems: 'center',
                         backgroundColor: '#fff',
                         borderRadius: '4px',
@@ -133,7 +133,7 @@ function PaginaInicial() {
                                 borderLeft: '1px solid #eee',
                                 borderRadius: 0,
                                 '&:hover': {
-                                    backgroundColor:'hsl(219, 68.50%, 36.10%)'
+                                    backgroundColor: 'hsl(219, 68.50%, 36.10%)'
                                 }
                             }}
                         >
@@ -145,9 +145,9 @@ function PaginaInicial() {
                     <Grid container spacing={3}>
                         {anunciosFiltrados.map((anuncio) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} size={3} key={anuncio.id}>
-                                <Card 
-                                    sx={{ 
-                                        height: '100%',
+                                <Card
+                                    sx={{
+                                        height: '90%',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         backgroundColor: '#fff',
@@ -176,9 +176,9 @@ function PaginaInicial() {
                                             />
                                         )}
                                         <CardContent sx={{ p: 0, pt: 2 }}>
-                                            <Typography 
-                                                variant="body1" 
-                                                sx={{ 
+                                            <Typography
+                                                variant="body1"
+                                                sx={{
                                                     fontSize: '14px',
                                                     color: '#333',
                                                     mb: 1,
@@ -192,9 +192,9 @@ function PaginaInicial() {
                                             >
                                                 {anuncio.titulo}
                                             </Typography>
-                                            <Typography 
-                                                variant="h6" 
-                                                sx={{ 
+                                            <Typography
+                                                variant="h6"
+                                                sx={{
                                                     fontSize: '24px',
                                                     fontWeight: '400',
                                                     color: '#333',
@@ -203,16 +203,22 @@ function PaginaInicial() {
                                             >
                                                 {`R$ ${Number(anuncio.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                             </Typography>
-                                            <Chip 
-                                                label="Frete grátis" 
-                                                size="small" 
-                                                sx={{ 
+                                            <Chip
+                                                label="Frete grátis"
+                                                size="small"
+                                                sx={{
                                                     backgroundColor: '#00a650',
                                                     color: '#fff',
                                                     fontSize: '12px',
                                                     height: '20px'
-                                                }} 
+                                                }}
                                             />
+                                            <Stack sx={{padding:'20px'}}>
+
+                                                <Button sx={{backgroundColor:'#003566', color:'white',":hover":{backgroundColor:'rgb(10, 72, 131)'}}}>
+                                                    Ver Detalhes
+                                                </Button>
+                                            </Stack>
                                         </CardContent>
                                     </Box>
                                 </Card>
@@ -224,14 +230,14 @@ function PaginaInicial() {
                 {/* Botão Flutuante - Estilo Mercado Livre */}
                 <SpeedDial
                     ariaLabel="Menu rápido"
-                    sx={{ 
-                        position: 'fixed', 
-                        bottom: 32, 
+                    sx={{
+                        position: 'fixed',
+                        bottom: 32,
                         right: 32,
                         '& .MuiSpeedDial-fab': {
                             backgroundColor: '#003566',
                             '&:hover': {
-                                backgroundColor:'rgb(23, 62, 121)'
+                                backgroundColor: 'rgb(23, 62, 121)'
                             }
                         }
                     }}
@@ -248,7 +254,7 @@ function PaginaInicial() {
                                     backgroundColor: '#003566',
                                     color: '#fff',
                                     '&:hover': {
-                                        backgroundColor:'rgb(23, 62, 121)'
+                                        backgroundColor: 'rgb(23, 62, 121)'
                                     }
                                 }
                             }}
@@ -259,9 +265,9 @@ function PaginaInicial() {
                 {/* Modal de Cadastro - Estilo Mercado Livre */}
                 <Modal open={openModal} onClose={() => setOpenModal(false)}>
                     <Box component="form" onSubmit={handleSubmit} sx={modalStyle}>
-                        <Typography 
-                            variant="h5" 
-                            sx={{ 
+                        <Typography
+                            variant="h5"
+                            sx={{
                                 mb: 3,
                                 color: '#003566',
                                 fontWeight: '600',
@@ -271,44 +277,44 @@ function PaginaInicial() {
                             Publicar novo anúncio
                         </Typography>
                         <Stack spacing={2}>
-                            <TextField 
-                                label="Título do anúncio" 
-                                value={titulo} 
-                                onChange={(e) => setTitulo(e.target.value)} 
-                                fullWidth 
-                                required 
+                            <TextField
+                                label="Título do anúncio"
+                                value={titulo}
+                                onChange={(e) => setTitulo(e.target.value)}
+                                fullWidth
+                                required
                             />
-                            <TextField 
-                                label="Descrição" 
-                                multiline 
-                                rows={3} 
-                                value={descricao} 
-                                onChange={(e) => setDescricao(e.target.value)} 
-                                fullWidth 
-                                required 
+                            <TextField
+                                label="Descrição"
+                                multiline
+                                rows={3}
+                                value={descricao}
+                                onChange={(e) => setDescricao(e.target.value)}
+                                fullWidth
+                                required
                             />
-                            <TextField 
-                                label="Preço (R$)" 
-                                type="number" 
-                                value={valor} 
-                                onChange={(e) => setValor(e.target.value)} 
-                                fullWidth 
-                                required 
+                            <TextField
+                                label="Preço (R$)"
+                                type="number"
+                                value={valor}
+                                onChange={(e) => setValor(e.target.value)}
+                                fullWidth
+                                required
                                 InputProps={{
                                     startAdornment: (
                                         <Typography sx={{ mr: 1, color: 'text.secondary' }}>R$</Typography>
                                     )
                                 }}
                             />
-                            <Button 
-                                variant="outlined" 
+                            <Button
+                                variant="outlined"
                                 component="label"
                                 sx={{
                                     backgroundColor: '#003566',
                                     color: '#fff',
-                                    border:'none',
+                                    border: 'none',
                                     '&:hover': {
-                                        backgroundColor:'rgb(25, 64, 122)'
+                                        backgroundColor: 'rgb(25, 64, 122)'
                                     }
                                 }}
                             >
@@ -316,24 +322,24 @@ function PaginaInicial() {
                                 <input type="file" hidden accept="image/*" onChange={handleImagemChange} />
                             </Button>
                             {preview && (
-                                <Box 
-                                    component="img" 
-                                    src={preview} 
-                                    alt="Pré-visualização" 
-                                    sx={{ 
-                                        width: '100%', 
-                                        maxHeight: 200, 
-                                        objectFit: 'contain', 
+                                <Box
+                                    component="img"
+                                    src={preview}
+                                    alt="Pré-visualização"
+                                    sx={{
+                                        width: '100%',
+                                        maxHeight: 200,
+                                        objectFit: 'contain',
                                         borderRadius: 1,
                                         border: '1px solid #eee'
-                                    }} 
+                                    }}
                                 />
                             )}
-                            <Button 
-                                type="submit" 
+                            <Button
+                                type="submit"
                                 variant="contained"
                                 sx={{
-                                    backgroundColor:'rgb(47, 115, 179)',
+                                    backgroundColor: 'rgb(47, 115, 179)',
                                     '&:hover': {
                                         backgroundColor: 'rgb(25, 64,122)'
                                     }

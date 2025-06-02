@@ -43,7 +43,7 @@ function Footer() {
                 <GitHubIcon />
               </IconButton>
               <IconButton 
-                href="mailto:contato@breshop.com" 
+                href="mailto:breshopcommerce.com.br@gmail.com" 
                 aria-label="Email"
                 sx={{ color: 'white' }}
               >
@@ -61,9 +61,6 @@ function Footer() {
               Início
             </Link>
             <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
-              Produtos
-            </Link>
-            <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
               Sobre Nós
             </Link>
           </Grid>
@@ -78,9 +75,6 @@ function Footer() {
             </Link>
             <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
               Privacidade
-            </Link>
-            <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
-              Devoluções
             </Link>
           </Grid>
 
