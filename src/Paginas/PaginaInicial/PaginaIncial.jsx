@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Header from '../../componentes/Header/Header';
 import Footer from '../../componentes/Footer/Footer';
 import {
@@ -22,6 +22,7 @@ import {
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
+import GlobalContext from '../../context/GlobalContext';
 
 const modalStyle = {
     position: 'absolute',
@@ -42,7 +43,7 @@ function PaginaInicial() {
     const [valor, setValor] = useState('');
     const [imagem, setImagem] = useState(null);
     const [preview, setPreview] = useState(null);
-    const [anuncios, setAnuncios] = useState([]);
+    const {anuncios, setAnuncios} = useContext(GlobalContext);
     const [termoPesquisa, setTermoPesquisa] = useState('');
     const navigate = useNavigate();
 

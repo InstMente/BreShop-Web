@@ -14,17 +14,20 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import GlobalContext from '../../context/GlobalContext';
 
 function Header() {
   const [open, setDrawerOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
+  const [carrinhoModalOpen, setCarrinhoModalOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const paginasOcultas = ['/', '/cadastro', '/recuperacaoSenha'];
   const logado = true;
-  
+  const { anuncios, setAnuncios } = useContext(GlobalContext);
+  const { carrinho, setCarrinho } = useContext(GlobalContext);
+
   // Funções de navegação
   const sair = (text) => {
     if (text === 'Sair') navigate('/');
@@ -39,18 +42,14 @@ function Header() {
     if (text === 'Minha Conta') navigate('/minhaConta');
   };
 
-  const toggleMenu = () => setDrawerOpen(!open);
-  const toggleCart = () => setCartOpen(!cartOpen);
+  const menuConta = () => setDrawerOpen(!open);
+  const carrinhoModal = () => setCarrinhoModalOpen(!carrinhoModalOpen);
   
   const mostrarPerfilEMenu = !paginasOcultas.includes(location.pathname);
 
-  // Dados de exemplo para o carrinho
-  const cartItems = [
-    { id: 1, name: 'Produto 1', price: 99.90, quantity: 2 },
-    { id: 2, name: 'Produto 2', price: 49.90, quantity: 1 },
-  ];
 
-  const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  const total = carrinho.reduce((sum, anuncio) => sum + anuncio.valor, 0);
 
   return (
     <>
@@ -80,13 +79,13 @@ function Header() {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             {logado ? (
               <>
-                <IconButton onClick={toggleCart} sx={{ color: 'white' }}>
-                  <Badge badgeContent={cartItems.length} color="error">
+                <IconButton onClick={carrinhoModal} sx={{ color: 'white' }}>
+                  <Badge badgeContent={carrinho.length} color="error">
                     <ShoppingCartIcon />
                   </Badge>
                 </IconButton>
                 <IconButton
-                  onClick={toggleMenu}
+                  onClick={menuConta}
                   sx={{ color: 'white', mr: 2 }}
                 >
                   <MenuIcon sx={{ fontSize: 34 }} />
@@ -118,7 +117,7 @@ function Header() {
       <Drawer
         anchor="right"
         open={open}
-        onClose={toggleMenu}
+        onClose={menuConta}
         PaperProps={{
           sx: {
             mt: '80px',
@@ -156,8 +155,8 @@ function Header() {
       {/* Drawer do Carrinho */}
       <Drawer
         anchor="right"
-        open={cartOpen}
-        onClose={toggleCart}
+        open={carrinhoModalOpen}
+        onClose={carrinhoModal}
         PaperProps={{
           sx: {
             mt: '80px',
@@ -176,12 +175,12 @@ function Header() {
           <Typography variant="h5" fontWeight="bold">
             Carrinho de Compras
           </Typography>
-          <IconButton onClick={toggleCart}>
+          <IconButton onClick={carrinhoModal}>
             <CloseIcon />
           </IconButton>
         </Box>
 
-        {cartItems.length === 0 ? (
+        {carrinho.length === 0 ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70%' }}>
             <ShoppingCartIcon sx={{ fontSize: 60, color: 'text.disabled', mb: 2 }} />
             <Typography variant="h6" color="text.secondary">
@@ -191,18 +190,15 @@ function Header() {
         ) : (
           <>
             <List sx={{ mb: 2 }}>
-              {cartItems.map((item) => (
-                <Box key={item.id}>
+              {carrinho.map((anuncio) => (
+                <Box key={anuncio.id}>
                   <ListItem sx={{ py: 2 }}>
                     <Box sx={{ flexGrow: 1 }}>
-                      <Typography fontWeight="medium">{item.name}</Typography>
+                      <Typography fontWeight="medium">{anuncio.titulo}</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {item.quantity} x R$ {item.price.toFixed(2)}
+                        R$ {anuncio.valor.toFixed(2)}
                       </Typography>
                     </Box>
-                    <Typography fontWeight="medium">
-                      R$ {(item.price * item.quantity).toFixed(2)}
-                    </Typography>
                   </ListItem>
                   <Divider />
                 </Box>
