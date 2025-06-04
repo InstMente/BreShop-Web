@@ -28,7 +28,6 @@ function Header() {
   const { anuncios, setAnuncios } = useContext(GlobalContext);
   const { carrinho, setCarrinho } = useContext(GlobalContext);
 
-  // Funções de navegação
   const sair = (text) => {
     if (text === 'Sair') navigate('/');
   };
