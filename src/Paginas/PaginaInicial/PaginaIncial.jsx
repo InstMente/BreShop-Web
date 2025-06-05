@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Header from '../../componentes/Header/Header';
 import Footer from '../../componentes/Footer/Footer';
 import {
@@ -16,15 +16,14 @@ import {
     CardContent,
     Grid,
     Modal,
-    Chip,
-    Divider
+    Chip
 } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import GlobalContext from '../../context/GlobalContext';
 
-const modalStyle = {
+const estiloModal = {
     position: 'absolute',
     top: '50%',
     left: '50%',
@@ -37,42 +36,37 @@ const modalStyle = {
 };
 
 function PaginaInicial() {
-    const [openModal, setOpenModal] = useState(false);
+    const [abrirModal, setAbrirModal] = useState(false);
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [valor, setValor] = useState('');
     const [imagem, setImagem] = useState(null);
     const [preview, setPreview] = useState(null);
-    const {anuncios, setAnuncios} = useContext(GlobalContext);
+    const { anuncios, setAnuncios } = useContext(GlobalContext);
     const [termoPesquisa, setTermoPesquisa] = useState('');
-    const navigate = useNavigate();
+    const navegar = useNavigate();
 
-    useEffect(() => {
-        const anunciosExistentes = JSON.parse(localStorage.getItem('anuncios')) || [];
-        setAnuncios(anunciosExistentes);
-    }, []);
-
-    const actions = [
-        { icon: <FileCopyIcon />, name: 'Cadastrar Anúncio', onClick: () => setOpenModal(true) }
+    const acoes = [
+        { icon: <FileCopyIcon />, name: 'Cadastrar Anúncio', onClick: () => setAbrirModal(true) }
     ];
 
-    const handleImagemChange = (e) => {
-        const file = e.target.files[0];
-        setImagem(file);
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreview(reader.result);
+    const alterarImagem = (e) => {
+        const arquivo = e.target.files[0];
+        setImagem(arquivo);
+        if (arquivo) {
+            const leitor = new FileReader();
+            leitor.onloadend = () => {
+                setPreview(leitor.result);
             };
-            reader.readAsDataURL(file);
+            leitor.readAsDataURL(arquivo);
         } else {
             setPreview(null);
         }
     };
 
-    const handleSubmit = (e) => {
+    const enviarFormulario = (e) => {
         e.preventDefault();
-        const anuncio = {
+        const novoAnuncio = {
             id: Date.now(),
             titulo,
             descricao,
@@ -80,17 +74,15 @@ function PaginaInicial() {
             imagem: preview,
             data: new Date().toISOString()
         };
-        const anunciosExistentes = JSON.parse(localStorage.getItem('anuncios')) || [];
-        const novosAnuncios = [...anunciosExistentes, anuncio];
-        localStorage.setItem('anuncios', JSON.stringify(novosAnuncios));
-        setAnuncios(novosAnuncios);
+        const atualizados = [...anuncios, novoAnuncio];
+        setAnuncios(atualizados);
         alert('Anúncio cadastrado com sucesso!');
         setTitulo('');
         setDescricao('');
         setValor('');
         setImagem(null);
         setPreview(null);
-        setOpenModal(false);
+        setAbrirModal(false);
     };
 
     const anunciosFiltrados = anuncios.filter((anuncio) =>
@@ -103,7 +95,6 @@ function PaginaInicial() {
             <Header />
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', gap: 4 }}>
-                    {/* Barra de Pesquisa - Estilo Mercado Livre */}
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -142,10 +133,9 @@ function PaginaInicial() {
                         </Button>
                     </Box>
 
-                    {/* Listagem de Anúncios - Estilo Mercado Livre */}
                     <Grid container spacing={3}>
                         {anunciosFiltrados.map((anuncio) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} size={3} key={anuncio.id}>
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={anuncio.id}>
                                 <Card
                                     sx={{
                                         height: '90%',
@@ -160,7 +150,7 @@ function PaginaInicial() {
                                         },
                                         cursor: 'pointer'
                                     }}
-                                    onClick={() => navigate('/anuncio', { state: { anuncio } })}
+                                    onClick={() => navegar('/anuncio', { state: { anuncio } })}
                                 >
                                     <Box sx={{ p: 2, flexGrow: 1 }}>
                                         {anuncio.imagem && (
@@ -214,9 +204,8 @@ function PaginaInicial() {
                                                     height: '20px'
                                                 }}
                                             />
-                                            <Stack sx={{padding:'20px'}}>
-
-                                                <Button sx={{backgroundColor:'#003566', color:'white',":hover":{backgroundColor:'rgb(10, 72, 131)'}}}>
+                                            <Stack sx={{ padding: '20px' }}>
+                                                <Button sx={{ backgroundColor: '#003566', color: 'white', ":hover": { backgroundColor: 'rgb(10, 72, 131)' } }}>
                                                     Ver Detalhes
                                                 </Button>
                                             </Stack>
@@ -228,7 +217,6 @@ function PaginaInicial() {
                     </Grid>
                 </Container>
 
-                {/* Botão Flutuante - Estilo Mercado Livre */}
                 <SpeedDial
                     ariaLabel="Menu rápido"
                     sx={{
@@ -244,12 +232,12 @@ function PaginaInicial() {
                     }}
                     icon={<SpeedDialIcon />}
                 >
-                    {actions.map((action) => (
+                    {acoes.map((acao) => (
                         <SpeedDialAction
-                            key={action.name}
-                            icon={action.icon}
-                            tooltipTitle={action.name}
-                            onClick={action.onClick}
+                            key={acao.name}
+                            icon={acao.icon}
+                            tooltipTitle={acao.name}
+                            onClick={acao.onClick}
                             FabProps={{
                                 sx: {
                                     backgroundColor: '#003566',
@@ -263,9 +251,8 @@ function PaginaInicial() {
                     ))}
                 </SpeedDial>
 
-                {/* Modal de Cadastro - Estilo Mercado Livre */}
-                <Modal open={openModal} onClose={() => setOpenModal(false)}>
-                    <Box component="form" onSubmit={handleSubmit} sx={modalStyle}>
+                <Modal open={abrirModal} onClose={() => setAbrirModal(false)}>
+                    <Box component="form" onSubmit={enviarFormulario} sx={estiloModal}>
                         <Typography
                             variant="h5"
                             sx={{
@@ -293,6 +280,7 @@ function PaginaInicial() {
                                 onChange={(e) => setDescricao(e.target.value)}
                                 fullWidth
                                 required
+                                inputProps={{ maxLength: 250}}
                             />
                             <TextField
                                 label="Preço (R$)"
@@ -301,11 +289,6 @@ function PaginaInicial() {
                                 onChange={(e) => setValor(e.target.value)}
                                 fullWidth
                                 required
-                                InputProps={{
-                                    startAdornment: (
-                                        <Typography sx={{ mr: 1, color: 'text.secondary' }}>R$</Typography>
-                                    )
-                                }}
                             />
                             <Button
                                 variant="outlined"
@@ -320,7 +303,7 @@ function PaginaInicial() {
                                 }}
                             >
                                 Adicionar fotos
-                                <input type="file" hidden accept="image/*" onChange={handleImagemChange} />
+                                <input required type="file" hidden accept="image/*" onChange={alterarImagem} />
                             </Button>
                             {preview && (
                                 <Box

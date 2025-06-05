@@ -12,6 +12,7 @@ function PaginaAnuncio() {
     const anuncio = location.state?.anuncio;
     const { carrinho, setCarrinho } = useContext(GlobalContext);
 
+
     if (!anuncio) {
         return (
             <Box sx={{
@@ -54,10 +55,10 @@ function PaginaAnuncio() {
     }
 
     const adicionarCarrinho = (anuncio) => {
-        setCarrinho(carrinho => {
+        setCarrinho(novoCarrinho => {
             const existeIndex = carrinho.findIndex(item => item.id === anuncio.id);
             if (existeIndex > -1) {
-                const novoCarrinho = [...carrinho];
+                // const novoCarrinho = [...carrinho];
                 novoCarrinho[existeIndex].quantidade += 1;
                 return novoCarrinho;
             } else {
