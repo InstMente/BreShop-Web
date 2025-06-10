@@ -22,6 +22,8 @@ import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SearchIcon from '@mui/icons-material/Search';
 import { useNavigate } from 'react-router-dom';
 import GlobalContext from '../../context/GlobalContext';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+
 
 const estiloModal = {
     position: 'absolute',
@@ -47,9 +49,18 @@ function PaginaInicial() {
     const navegar = useNavigate();
 
     const acoes = [
-        { icon: <FileCopyIcon />, name: 'Cadastrar Anúncio', onClick: () => setAbrirModal(true) }
+        {
+            icon: <SupportAgentIcon />,
+            name: 'Suporte via WhatsApp',
+            onClick: () => window.open('https://wa.me/554896726930', '_blank')
+        },
+        {
+            icon: <FileCopyIcon />,
+            name: 'Cadastrar Anúncio',
+            onClick: () => setAbrirModal(true)
+        }
     ];
-
+    
     const alterarImagem = (e) => {
         const arquivo = e.target.files[0];
         setImagem(arquivo);
@@ -280,7 +291,7 @@ function PaginaInicial() {
                                 onChange={(e) => setDescricao(e.target.value)}
                                 fullWidth
                                 required
-                                inputProps={{ maxLength: 250}}
+                                inputProps={{ maxLength: 250 }}
                             />
                             <TextField
                                 label="Preço (R$)"
