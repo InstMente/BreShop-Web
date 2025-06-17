@@ -2,6 +2,7 @@ import { Box, Button, Container, Stack, TextField, Typography } from '@mui/mater
 import Header from '../../componentes/Header/Header'
 import Footer from '../../componentes/Footer/Footer'
 import { useState } from 'react';
+import { formatarComMascara, MASCARA_CPF, MASCARA_CELULAR, MASCARA_CEP } from '../../utils/mascaras';
 
 function PaginaCadastro() {
     const [usuario, setUsuario] = useState('');
@@ -107,10 +108,9 @@ function PaginaCadastro() {
                         />
                         <TextField
                             required
-                            type='number'
                             label="Telefone:"
                             value={telefone}
-                            onChange={(e) => setTelefone(e.target.value)}
+                            onChange={(e) => setTelefone(formatarComMascara(e.target.value, MASCARA_CELULAR))}
                             sx={{ width: '300px' }}
                         />
                         <TextField
@@ -124,18 +124,16 @@ function PaginaCadastro() {
                         />
                         <TextField
                             required
-                            type='number'
                             label="CPF:"
                             value={cpf}
-                            onChange={(e) => setCpf(e.target.value)}
+                            onChange={(e) => setCpf(formatarComMascara(e.target.value, MASCARA_CPF))}
                             sx={{ width: '300px' }}
                         />
                         <TextField
                             required
-                            type='number'
                             label="CEP:"
                             value={cep}
-                            onChange={(e) => setCep(e.target.value)}
+                            onChange={(e) => setCep(formatarComMascara(e.target.value, MASCARA_CEP))}
                             sx={{ width: '300px' }}
                         />
                         <TextField
@@ -161,7 +159,6 @@ function PaginaCadastro() {
                         />
                         <TextField
                             required
-                            type='number'
                             label="Número:"
                             value={numero}
                             onChange={(e) => setNumero(e.target.value)}

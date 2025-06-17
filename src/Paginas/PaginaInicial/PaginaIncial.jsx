@@ -60,7 +60,6 @@ function PaginaInicial() {
             onClick: () => setAbrirModal(true)
         }
     ];
-    
     const alterarImagem = (e) => {
         const arquivo = e.target.files[0];
         setImagem(arquivo);

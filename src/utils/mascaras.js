@@ -24,3 +24,4 @@ export const MASCARA_CEP = '#####-###';
 export const MASCARA_CARTAO = '#### #### #### ####';
 export const MASCARA_VALIDADE = '##/##';
 export const MASCARA_CVV = '###';
+

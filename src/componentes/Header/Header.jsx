@@ -91,7 +91,7 @@ function Header() {
       <Box
         sx={{
           width: '100%',
-          height: '12%',
+          height: '9%',
           backgroundColor: '#003566',
           display: 'flex',
           alignItems: 'center',
@@ -134,7 +134,7 @@ function Header() {
 
       <Box sx={{ height: '70px' }} />
 
-      <Drawer anchor="right" open={menuAberto} onClose={() => setMenuAberto(false)} PaperProps={{
+      <Drawer anchor="right" open={menuAberto} onClose={() => setMenuAberto()} PaperProps={{
         sx: {
           mt: '80px', width: '250px', height: '40vh', borderRadius: '1px 1px 1px 20px', p: 2,
         },
