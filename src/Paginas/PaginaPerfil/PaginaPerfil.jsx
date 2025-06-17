@@ -3,22 +3,26 @@ import React, { useEffect, useState } from 'react';
 import Header from '../../componentes/Header/Header';
 import Footer from '../../componentes/Footer/Footer';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function PaginaPerfil() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const usuarioId = location.state?.usuario?.id || localStorage.getItem("usuarioId");
+
     const [usuario, setUsuario] = useState({
+        id: '',
         nome: '',
         email: '',
         telefone: '',
-        dataNascimento: '',
+        datanascimento: '',
         cpf: '',
         cep: '',
         cidade: '',
         bairro: '',
         rua: '',
-        numero: '',
+        numerocasa: '',
         senha: '',
         foto: ''
     });
@@ -27,12 +31,27 @@ function PaginaPerfil() {
     const [usuarioEdit, setUsuarioEdit] = useState({ ...usuario });
 
     useEffect(() => {
-        const dados = JSON.parse(localStorage.getItem('usuarioLogado'));
-        if (dados) {
-            setUsuario(dados);
-            setUsuarioEdit(dados);
+        if (!usuarioId) {
+            alert("Usuário não autenticado.");
+            navigate('/');
+            return;
         }
-    }, []);
+
+        const buscarUsuario = async () => {
+            try {
+                const response = await fetch(`http://localhost:3001/usuarios/${usuarioId}`);
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.mensagem);
+                setUsuario(data);
+                setUsuarioEdit(data);
+            } catch (error) {
+                console.error('Erro ao buscar usuário:', error);
+                alert('Erro ao carregar dados do usuário.');
+            }
+        };
+
+        buscarUsuario();
+    }, [usuarioId, navigate]);
 
     const handleOpen = () => setOpenModal(true);
     const handleClose = () => setOpenModal(false);
@@ -42,15 +61,31 @@ function PaginaPerfil() {
         setUsuarioEdit({ ...usuarioEdit, [name]: value });
     };
 
-    const handleSave = () => {
-        setUsuario(usuarioEdit);
-        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEdit));
-        setOpenModal(false);
+    const handleSave = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/usuarios/${usuarioId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(usuarioEdit)
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                alert(result.mensagem);
+                return;
+            }
+
+            alert('Perfil atualizado com sucesso');
+            setUsuario(usuarioEdit);
+            setOpenModal(false);
+        } catch (error) {
+            console.error('Erro ao atualizar:', error);
+            alert('Erro ao salvar alterações.');
+        }
     };
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden' }}>
-
             <Header />
             <Button
                 sx={{
@@ -65,9 +100,7 @@ function PaginaPerfil() {
                     fontSize: '0.875rem',
                     backgroundColor: '#003566',
                     backdropFilter: 'blur(4px)',
-                    '&:hover': {
-                        backgroundColor: 'rgb(15, 70, 122)'
-                    },
+                    '&:hover': { backgroundColor: 'rgb(15, 70, 122)' },
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px'
@@ -93,17 +126,17 @@ function PaginaPerfil() {
                         </Stack>
                     </Box>
                     <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 4 }}>
-                        <TextField disabled label='Usuário:' value={usuario.usuario} sx={{ width: '80%' }} InputLabelProps={{ shrink: true }} />
-                        <TextField disabled label="Email:" value={usuario.email} sx={{ width: '80%' }} />
-                        <TextField disabled label="Telefone:" type="number" value={usuario.telefone} sx={{ width: '80%' }} />
-                        <TextField disabled type='date' value={usuario.dataNascimento} sx={{ width: '80%' }} />
-                        <TextField disabled label="CPF:" type="number" value={usuario.cpf} sx={{ width: '80%' }} />
-                        <TextField disabled label="CEP:" type="number" value={usuario.cep} sx={{ width: '80%' }} />
-                        <TextField disabled label="Cidade:" value={usuario.cidade} sx={{ width: '80%' }} />
-                        <TextField disabled label="Bairro:" value={usuario.bairro} sx={{ width: '80%' }} />
-                        <TextField disabled label="Rua:" value={usuario.rua} sx={{ width: '80%' }} />
-                        <TextField disabled label="Número:" type="number" value={usuario.numero} sx={{ width: '80%' }} />
-                        <TextField disabled label="Senha:" type="password" value={usuario.senha} sx={{ width: '80%' }} />
+                        <TextField disabled label='Nome' value={usuario.nome} sx={{ width: '80%' }} />
+                        <TextField disabled label="Email" value={usuario.email} sx={{ width: '80%' }} />
+                        <TextField disabled label="Telefone" value={usuario.telefone} sx={{ width: '80%' }} />
+                        <TextField disabled type='date' value={usuario.datanascimento} sx={{ width: '80%' }} />
+                        <TextField disabled label="CPF" value={usuario.cpf} sx={{ width: '80%' }} />
+                        <TextField disabled label="CEP" value={usuario.cep} sx={{ width: '80%' }} />
+                        <TextField disabled label="Cidade" value={usuario.cidade} sx={{ width: '80%' }} />
+                        <TextField disabled label="Bairro" value={usuario.bairro} sx={{ width: '80%' }} />
+                        <TextField disabled label="Rua" value={usuario.rua} sx={{ width: '80%' }} />
+                        <TextField disabled label="Número" value={usuario.numerocasa} sx={{ width: '80%' }} />
+                        <TextField disabled label="Senha" type="password" value={usuario.senha} sx={{ width: '80%' }} />
                         <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '80%' }}>
                             <Button onClick={handleOpen} sx={{ width: '100%', backgroundColor: '#003566', '&:hover': { backgroundColor: '#00509d' } }} variant="contained">
                                 Editar Perfil
@@ -150,21 +183,17 @@ function PaginaPerfil() {
                         <Box component="img" src={usuarioEdit.foto} sx={{ width: '100%', maxHeight: '200px', borderRadius: '10px', mt: 2, objectFit: 'cover' }} />
                     )}
                     <Stack spacing={2} mt={2}>
-                        {Object.entries(usuarioEdit).map(([key, value]) => (
-                            key !== 'foto' && (
-                                <TextField
-                                    key={key}
-                                    label={key.charAt(0).toUpperCase() + key.slice(1)}
-                                    name={key}
-                                    type={key === 'senha' ? 'password' : key === 'dataNascimento' ? 'date' : 'text'}
-                                    value={value}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    disabled={key === 'id'}
-                                    InputLabelProps={key === 'dataNascimento' ? { shrink: true } : {}}
-                                />
-                            )
-                        ))}
+                        <TextField label="Nome" name="nome" value={usuarioEdit.nome} onChange={handleChange} fullWidth />
+                        <TextField label="Email" name="email" value={usuarioEdit.email} onChange={handleChange} fullWidth />
+                        <TextField label="Telefone" name="telefone" value={usuarioEdit.telefone} onChange={handleChange} fullWidth />
+                        <TextField label="Data de Nascimento" name="datanascimento" type="date" value={usuarioEdit.datanascimento} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} />
+                        <TextField label="CPF" name="cpf" value={usuarioEdit.cpf} onChange={handleChange} fullWidth />
+                        <TextField label="CEP" name="cep" value={usuarioEdit.cep} onChange={handleChange} fullWidth />
+                        <TextField label="Cidade" name="cidade" value={usuarioEdit.cidade} onChange={handleChange} fullWidth />
+                        <TextField label="Bairro" name="bairro" value={usuarioEdit.bairro} onChange={handleChange} fullWidth />
+                        <TextField label="Rua" name="rua" value={usuarioEdit.rua} onChange={handleChange} fullWidth />
+                        <TextField label="Número" name="numerocasa" value={usuarioEdit.numerocasa} onChange={handleChange} fullWidth />
+                        <TextField label="Senha" name="senha" type="password" value={usuarioEdit.senha} onChange={handleChange} fullWidth />
                         <Button variant="contained" sx={{ backgroundColor: '#003566', color: "white" }} onClick={handleSave}>
                             Salvar
                         </Button>

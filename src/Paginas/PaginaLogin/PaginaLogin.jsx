@@ -1,32 +1,33 @@
-import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material'
-import Header from '../../componentes/Header/Header'
-import Footer from '../../componentes/Footer/Footer'
+import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
+import Header from '../../componentes/Header/Header';
+import Footer from '../../componentes/Footer/Footer';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function PaginaLogin() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!email || !senha) {
             alert('Por favor, preencha todos os campos!');
             return;
         }
 
-        const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+        try {
+            const response = await axios.get(`http://localhost:3000/usuarios/email/${email}`);
+            const usuario = response.data;
 
-        const usuarioEncontrado = usuarios.find(
-            (usuario) => usuario.email === email && usuario.senha === senha
-        );
-
-        if (usuarioEncontrado) {
-            alert('Login realizado com sucesso!');
-            localStorage.setItem('usuarioLogado', JSON.stringify(usuarioEncontrado));
-            navigate('/Home'); 
-        } else {
-            alert('Email ou senha incorretos!');
+            if (usuario.senha === senha) {
+                alert('Login realizado com sucesso!');
+                navigate('/Home', { state: { usuario } });
+            } else {
+                alert('Senha incorreta!');
+            }
+        } catch (error) {
+            alert('Email não encontrado!');
         }
     };
 
@@ -80,7 +81,7 @@ function PaginaLogin() {
             </Box>
             <Footer />
         </Box>
-    )
+    );
 }
 
 export default PaginaLogin;

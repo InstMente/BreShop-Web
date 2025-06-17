@@ -1,8 +1,9 @@
-import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material'
-import Header from '../../componentes/Header/Header'
-import Footer from '../../componentes/Footer/Footer'
+import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
+import Header from '../../componentes/Header/Header';
+import Footer from '../../componentes/Footer/Footer';
 import { useState } from 'react';
 import { formatarComMascara, MASCARA_CPF, MASCARA_CELULAR, MASCARA_CEP } from '../../utils/mascaras';
+import axios from 'axios';
 
 function PaginaCadastro() {
     const [usuario, setUsuario] = useState('');
@@ -18,7 +19,7 @@ function PaginaCadastro() {
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
 
-    const handleCadastro = () => {
+    const handleCadastro = async () => {
         if (!usuario || !email || !telefone || !dataNascimento || !cpf || !cep || !cidade || !bairro || !rua || !numero || !senha || !confirmarSenha) {
             alert('Por favor, preencha todos os campos!');
             return;
@@ -29,54 +30,43 @@ function PaginaCadastro() {
             return;
         }
 
-        const usuariosExistentes = JSON.parse(localStorage.getItem('usuarios')) || [];
+        try {
+            const resposta = await axios.post('http://localhost:3000/usuarios', {
+                nome: usuario,
+                email,
+                telefone,
+                datanascimento: dataNascimento,
+                cpf,
+                cep,
+                cidade,
+                bairro,
+                rua,
+                numerocasa: numero,
+                senha
+            });
 
-        const usuarioExistente = usuariosExistentes.find(
-            (u) => u.usuario === usuario || u.email === email || u.cpf === cpf
-        );
-
-        if (usuarioExistente) {
-            if (usuarioExistente.usuario === usuario) {
-                alert('Nome de usuário já cadastrado!');
-            } else if (usuarioExistente.email === email) {
-                alert('Email já cadastrado!');
-            } else if (usuarioExistente.cpf === cpf) {
-                alert('CPF já cadastrado!');
+            if (resposta.status === 201) {
+                alert('Cadastro realizado com sucesso!');
+                setUsuario('');
+                setEmail('');
+                setTelefone('');
+                setDataNascimento('');
+                setCpf('');
+                setCep('');
+                setCidade('');
+                setBairro('');
+                setRua('');
+                setNumero('');
+                setSenha('');
+                setConfirmarSenha('');
             }
-            return;
+        } catch (erro) {
+            if (erro.response) {
+                alert(erro.response.data.mensagem || erro.response.data.erro || 'Erro no cadastro');
+            } else {
+                alert('Erro na conexão com o servidor');
+            }
         }
-
-        const novoUsuario = {
-            id: Date.now(),
-            usuario,
-            email,
-            telefone,
-            dataNascimento,
-            cpf,
-            cep,
-            cidade,
-            bairro,
-            rua,
-            numero,
-            senha
-        };
-
-        localStorage.setItem('usuarios', JSON.stringify([...usuariosExistentes, novoUsuario]));
-
-        alert('Cadastro realizado com sucesso!');
-
-        setUsuario('');
-        setEmail('');
-        setTelefone('');
-        setDataNascimento('');
-        setCpf('');
-        setCep('');
-        setCidade('');
-        setBairro('');
-        setRua('');
-        setNumero('');
-        setSenha('');
-        setConfirmarSenha('');
     };
 
     return (
@@ -92,94 +82,18 @@ function PaginaCadastro() {
                     <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 4 }}>
                         <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: '800', color: "#003566" }}>Cadastro</h1>
 
-                        <TextField
-                            required
-                            label="Usuário:"
-                            value={usuario}
-                            onChange={(e) => setUsuario(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Email:"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Telefone:"
-                            value={telefone}
-                            onChange={(e) => setTelefone(formatarComMascara(e.target.value, MASCARA_CELULAR))}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            type='date'
-                            label="Data de Nascimento"
-                            value={dataNascimento}
-                            onChange={(e) => setDataNascimento(e.target.value)}
-                            InputLabelProps={{ shrink: true }}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="CPF:"
-                            value={cpf}
-                            onChange={(e) => setCpf(formatarComMascara(e.target.value, MASCARA_CPF))}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="CEP:"
-                            value={cep}
-                            onChange={(e) => setCep(formatarComMascara(e.target.value, MASCARA_CEP))}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Cidade:"
-                            value={cidade}
-                            onChange={(e) => setCidade(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Bairro:"
-                            value={bairro}
-                            onChange={(e) => setBairro(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Rua:"
-                            value={rua}
-                            onChange={(e) => setRua(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Número:"
-                            value={numero}
-                            onChange={(e) => setNumero(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Senha:"
-                            type="password"
-                            value={senha}
-                            onChange={(e) => setSenha(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
-                        <TextField
-                            required
-                            label="Confirmar Senha:"
-                            type="password"
-                            value={confirmarSenha}
-                            onChange={(e) => setConfirmarSenha(e.target.value)}
-                            sx={{ width: '300px' }}
-                        />
+                        <TextField label="Usuário:" value={usuario} onChange={(e) => setUsuario(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label="Email:" value={email} onChange={(e) => setEmail(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label="Telefone:" value={telefone} onChange={(e) => setTelefone(formatarComMascara(e.target.value, MASCARA_CELULAR))} sx={{ width: '300px' }} />
+                        <TextField type="date" label="Data de Nascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} InputLabelProps={{ shrink: true }} sx={{ width: '300px' }} />
+                        <TextField label="CPF:" value={cpf} onChange={(e) => setCpf(formatarComMascara(e.target.value, MASCARA_CPF))} sx={{ width: '300px' }} />
+                        <TextField label="CEP:" value={cep} onChange={(e) => setCep(formatarComMascara(e.target.value, MASCARA_CEP))} sx={{ width: '300px' }} />
+                        <TextField label="Cidade:" value={cidade} onChange={(e) => setCidade(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label="Bairro:" value={bairro} onChange={(e) => setBairro(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label="Rua:" value={rua} onChange={(e) => setRua(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label="Número:" value={numero} onChange={(e) => setNumero(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label="Senha:" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} sx={{ width: '300px' }} />
+                        <TextField label="Confirmar Senha:" type="password" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} sx={{ width: '300px' }} />
                         <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
                             <Button sx={{ width: '250px', backgroundColor: '#00509d', '&:hover': { backgroundColor: '#003566' } }} variant="contained" onClick={handleCadastro}>
                                 Cadastrar
@@ -191,7 +105,7 @@ function PaginaCadastro() {
             </Box>
             <Footer />
         </Box>
-    )
+    );
 }
 
 export default PaginaCadastro;
