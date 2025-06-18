@@ -14,17 +14,19 @@ function App() {
 
   return (
     <>
-      <Router>
-      <Routes>
-        <Route path="/" element={<PaginaLogin />}/>
-        <Route path="/Home" element={<PaginaIncial />}/>
-        <Route path="/cadastro" element={<PaginaCadastro />}/>
-        <Route path="/meusAnuncio" element={<PaginaMeusAnuncio />}/>
-        <Route path="/registroVendas" element={<PaginaRegistroVendas />}/>
-        <Route path="/minhaConta" element={<PaginaPerfil />}/>
-        <Route path="/anuncio" element={<PaginaAnuncio />}/>
-        <Route path="/recuperacaoSenha" element={<PaginaRecuperarSenha />}/>
-      </Routes>
+      <Router basename="/">
+        <Routes>
+          <Route path="/" element={<PaginaLogin />}/>
+          <Route path="/Home" element={<PaginaIncial />}/>
+          <Route path="/cadastro" element={<PaginaCadastro />}/>
+          <Route path="/meusAnuncio" element={<PaginaMeusAnuncio />}/>
+          <Route path="/registroVendas" element={<PaginaRegistroVendas />}/>
+          <Route path="/minhaConta" element={<PaginaPerfil />}/>
+          <Route path="/anuncio" element={<PaginaAnuncio />}/>
+          <Route path="/recuperacaoSenha" element={<PaginaRecuperarSenha />}/>
+
+          <Route path="*" element={<Navigate to="/" />}/>
+        </Routes>
       </Router>
     </>
   )
