@@ -72,8 +72,8 @@ function PaginaLogin() {
                             >
                                 Logar
                             </Button>
-                            <Typography sx={{ color: '#003566' }}>
-                                Não possui conta? <a style={{ color: '#003566' }} href='/cadastro'>Cadastre-se</a>
+                            <Typography sx={{ color: '#003566' }} onClick={() => {navigate('/cadastro')}}>
+                                Não possui conta? <a style={{ color: '#003566' }}>Cadastre-se</a>
                             </Typography>
                         </Stack>
                     </Stack>
