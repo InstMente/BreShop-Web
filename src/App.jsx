@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import PaginaIncial from "./Paginas/PaginaInicial/PaginaIncial"
-import PaginaLogin from "./Paginas/PaginaLogin/PaginaLogin"
-import PaginaCadastro from "./Paginas/PaginaCadastro/PaginaCadastro"
-import PaginaMeusAnuncio from "./Paginas/PaginaMeusAnuncios/PaginaMeusAnuncios"
-import PaginaRegistroVendas from "./Paginas/PaginaRegistroVendas/PaginaRegistroVendas"
-import PaginaPerfil from "./Paginas/PaginaPerfil/PaginaPerfil"
-import PaginaAnuncio from "./Paginas/PaginaAnuncio/PaginaAnuncio"
-import PaginaRecuperarSenha from "./Paginas/PaginaRecuperarSenha/PaginaRecuperarSenha"
+import PaginaIncial from "./Paginas/PaginaInicial/PaginaIncial.jsx"
+import PaginaLogin from "./Paginas/PaginaLogin/PaginaLogin.jsx"
+import PaginaCadastro from "./Paginas/PaginaCadastro/PaginaCadastro.jsx"
+import PaginaMeusAnuncio from "./Paginas/PaginaMeusAnuncios/PaginaMeusAnuncios.jsx"
+import PaginaRegistroVendas from "./Paginas/PaginaRegistroVendas/PaginaRegistroVendas.jsx"
+import PaginaPerfil from "./Paginas/PaginaPerfil/PaginaPerfil.jsx"
+import PaginaAnuncio from "./Paginas/PaginaAnuncio/PaginaAnuncio.jsx"
+import PaginaRecuperarSenha from "./Paginas/PaginaRecuperarSenha/PaginaRecuperarSenha.jsx"
 
 
 
