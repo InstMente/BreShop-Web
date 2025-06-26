@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../componentes/Header/Header';
 import Footer from '../../componentes/Footer/Footer';
 import {
@@ -20,10 +20,9 @@ import {
 } from '@mui/material';
 import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
 import SearchIcon from '@mui/icons-material/Search';
-import { useNavigate } from 'react-router-dom';
-import GlobalContext from '../../context/GlobalContext';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const estiloModal = {
     position: 'absolute',
@@ -41,10 +40,10 @@ function PaginaInicial() {
     const [abrirModal, setAbrirModal] = useState(false);
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
-    const [valor, setValor] = useState('');
-    const [imagem, setImagem] = useState(null);
+    const [preco, setPreco] = useState('');
+    const [fotoFile, setFotoFile] = useState(null);
     const [preview, setPreview] = useState(null);
-    const { anuncios, setAnuncios } = useContext(GlobalContext);
+    const [anuncios, setAnuncios] = useState([]);
     const [termoPesquisa, setTermoPesquisa] = useState('');
     const navegar = useNavigate();
 
@@ -60,9 +59,23 @@ function PaginaInicial() {
             onClick: () => setAbrirModal(true)
         }
     ];
+
+    useEffect(() => {
+        // Busca anúncios do backend
+        async function fetchAnuncios() {
+            try {
+                const response = await axios.get('http://localhost:3001/anuncios');
+                setAnuncios(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar anúncios:', error);
+            }
+        }
+        fetchAnuncios();
+    }, []);
+
     const alterarImagem = (e) => {
         const arquivo = e.target.files[0];
-        setImagem(arquivo);
+        setFotoFile(arquivo);
         if (arquivo) {
             const leitor = new FileReader();
             leitor.onloadend = () => {
@@ -74,31 +87,61 @@ function PaginaInicial() {
         }
     };
 
-    const enviarFormulario = (e) => {
+    const enviarFormulario = async (e) => {
         e.preventDefault();
-        const novoAnuncio = {
-            id: Date.now(),
-            titulo,
-            descricao,
-            valor,
-            imagem: preview,
-            data: new Date().toISOString()
-        };
-        const atualizados = [...anuncios, novoAnuncio];
-        setAnuncios(atualizados);
-        alert('Anúncio cadastrado com sucesso!');
-        setTitulo('');
-        setDescricao('');
-        setValor('');
-        setImagem(null);
-        setPreview(null);
-        setAbrirModal(false);
+
+        try {
+            const email = localStorage.getItem('user');
+            if (!email) {
+                alert('Usuário não autenticado.');
+                return;
+            }
+
+            const resUsuario = await axios.get(`http://localhost:3001/usuarios/email/${email}`);
+            const usuarioId = resUsuario.data.id;
+
+            if (!usuarioId) {
+                alert('Usuário não encontrado.');
+                return;
+            }
+
+            let fotoBase64 = preview || null;
+
+            const novoAnuncio = {
+                titulo,
+                descricao,
+                preco,
+                usuarioId,
+                foto: fotoBase64
+            };
+
+            const config = {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            };
+
+            const resposta = await axios.post('http://localhost:3001/anuncios', novoAnuncio, config);
+
+            setAnuncios(prev => [...prev, { id: resposta.data.id, ...novoAnuncio }]);
+
+            alert('Anúncio cadastrado com sucesso!');
+            setTitulo('');
+            setDescricao('');
+            setPreco('');
+            setFotoFile(null);
+            setPreview(null);
+            setAbrirModal(false);
+        } catch (error) {
+            console.error('Erro ao cadastrar anúncio:', error);
+            alert('Erro ao cadastrar anúncio.');
+        }
     };
 
-    const anunciosFiltrados = anuncios.filter((anuncio) =>
-        anuncio.titulo.toLowerCase().includes(termoPesquisa.toLowerCase()) ||
-        anuncio.descricao.toLowerCase().includes(termoPesquisa.toLowerCase())
-    );
+    const anunciosFiltrados = anuncios
+        .filter((anuncio) => anuncio.ativo === true)
+        .filter((anuncio) =>
+            anuncio.titulo.toLowerCase().includes(termoPesquisa.toLowerCase()) ||
+            anuncio.descricao.toLowerCase().includes(termoPesquisa.toLowerCase())
+        );
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#ebebeb', overflowX: 'hidden' }}>
@@ -145,10 +188,9 @@ function PaginaInicial() {
 
                     <Grid container spacing={3}>
                         {anunciosFiltrados.map((anuncio) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={anuncio.id}>
+                           <Grid item xs={12} sm={6} md={3} lg={3} key={anuncio.id} sx={{ display: 'flex' }}>
                                 <Card
                                     sx={{
-                                        height: '90%',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         backgroundColor: '#fff',
@@ -158,32 +200,44 @@ function PaginaInicial() {
                                         '&:hover': {
                                             boxShadow: '0 7px 11px 0 rgba(0,0,0,.1)'
                                         },
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        width: '100%',
+                                        height: 400, // altura fixa do card
                                     }}
                                     onClick={() => navegar('/anuncio', { state: { anuncio } })}
                                 >
-                                    <Box sx={{ p: 2, flexGrow: 1 }}>
-                                        {anuncio.imagem && (
-                                            <CardMedia
-                                                component="img"
-                                                image={anuncio.imagem}
-                                                alt={anuncio.titulo}
-                                                sx={{
-                                                    width: '100%',
-                                                    height: '160px',
-                                                    objectFit: 'contain',
-                                                    margin: '0 auto'
-                                                }}
-                                            />
-                                        )}
-                                        <CardContent sx={{ p: 0, pt: 2 }}>
+                                    {anuncio.foto && (
+                                        <CardMedia
+                                            component="img"
+                                            image={anuncio.foto}
+                                            alt={anuncio.titulo}
+                                            sx={{
+                                                height: 180,     // altura fixa para a imagem
+                                                width: '100%',
+                                                objectFit: 'cover',  // cobre toda área da imagem, pode cortar, mas mantém tamanho fixo do card
+                                                borderTopLeftRadius: 4,
+                                                borderTopRightRadius: 4,
+                                                flexShrink: 0,   // evita que encolha
+                                            }}
+                                        />
+                                    )}
+                                    <CardContent
+                                        sx={{
+                                            flexGrow: 1,    // faz ocupar todo espaço restante
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            justifyContent: 'space-between',
+                                            p: 2
+                                        }}
+                                    >
+                                        <Box>
                                             <Typography
                                                 variant="body1"
                                                 sx={{
                                                     fontSize: '14px',
                                                     color: '#333',
                                                     mb: 1,
-                                                    height: '36px',
+                                                    height: 40,
                                                     overflow: 'hidden',
                                                     textOverflow: 'ellipsis',
                                                     display: '-webkit-box',
@@ -196,13 +250,13 @@ function PaginaInicial() {
                                             <Typography
                                                 variant="h6"
                                                 sx={{
-                                                    fontSize: '24px',
+                                                    fontSize: '20px',
                                                     fontWeight: '400',
                                                     color: '#333',
                                                     mb: 1
                                                 }}
                                             >
-                                                {`R$ ${Number(anuncio.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                                                {`R$ ${Number(anuncio.preco).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                                             </Typography>
                                             <Chip
                                                 label="Frete grátis"
@@ -211,18 +265,26 @@ function PaginaInicial() {
                                                     backgroundColor: '#00a650',
                                                     color: '#fff',
                                                     fontSize: '12px',
-                                                    height: '20px'
+                                                    height: '20px',
+                                                    mb: 2,
                                                 }}
                                             />
-                                            <Stack sx={{ padding: '20px' }}>
-                                                <Button sx={{ backgroundColor: '#003566', color: 'white', ":hover": { backgroundColor: 'rgb(10, 72, 131)' } }}>
-                                                    Ver Detalhes
-                                                </Button>
-                                            </Stack>
-                                        </CardContent>
-                                    </Box>
+                                        </Box>
+                                        <Stack>
+                                            <Button
+                                                sx={{
+                                                    backgroundColor: '#003566',
+                                                    color: 'white',
+                                                    ":hover": { backgroundColor: 'rgb(10, 72, 131)' }
+                                                }}
+                                            >
+                                                Ver Detalhes
+                                            </Button>
+                                        </Stack>
+                                    </CardContent>
                                 </Card>
                             </Grid>
+
                         ))}
                     </Grid>
                 </Container>
@@ -295,8 +357,8 @@ function PaginaInicial() {
                             <TextField
                                 label="Preço (R$)"
                                 type="number"
-                                value={valor}
-                                onChange={(e) => setValor(e.target.value)}
+                                value={preco}
+                                onChange={(e) => setPreco(e.target.value)}
                                 fullWidth
                                 required
                             />

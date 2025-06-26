@@ -31,7 +31,7 @@ function PaginaCadastro() {
         }
 
         try {
-            const resposta = await axios.post('http://localhost:3000/usuarios', {
+            const resposta = await axios.post('http://localhost:3001/usuarios', {
                 nome: usuario,
                 email,
                 telefone,

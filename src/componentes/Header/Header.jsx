@@ -1,6 +1,5 @@
 import {
   Box,
-  Stack,
   IconButton,
   Drawer,
   List,
@@ -48,11 +47,16 @@ function Header() {
   const navigate = useNavigate();
 
   const paginasOcultas = ['/', '/cadastro', '/recuperacaoSenha'];
-  const logado = true;
+  const { carrinho, limparCarrinho, setUser, setToken } = useContext(GlobalContext);
 
-  const { carrinho, limparCarrinho } = useContext(GlobalContext);
+  const logado = !!localStorage.getItem('token');
 
   const sair = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('cartao');
+    setUser(null);
+    setToken(null);
     setMenuAberto(false);
     navigate('/');
   };
@@ -64,34 +68,91 @@ function Header() {
 
   const mostrarCabecalho = !paginasOcultas.includes(location.pathname);
 
-  const total = carrinho.reduce((soma, anuncio) => soma + parseFloat(anuncio.valor), 0);
+  const total = carrinho.reduce(
+    (soma, anuncio) => soma + Number(anuncio.preco ?? anuncio.valor ?? 0), 0
+  );
 
-  const confirmarCompra = () => {
+  const confirmarCompra = async () => {
     setCarregando(true);
-    setTimeout(() => {
+
+    try {
+const userString = localStorage.getItem('user');
+
+if (!userString) {
+  alert('Usuário não está logado!');
+  setCarregando(false);
+  return;
+}
+
+let compradorId = null;
+try {
+  const resposta = await fetch(`http://localhost:3001/usuarios/email/${userString}`);
+  const dados = await resposta.json();
+
+  if (!resposta.ok || !dados.id) {
+    alert('Erro ao obter ID do comprador.');
+    setCarregando(false);
+    return;
+  }
+
+  compradorId = dados.id;
+} catch (error) {
+  console.error('Erro ao buscar comprador por e-mail:', error);
+  alert('Erro ao buscar dados do usuário.');
+  setCarregando(false);
+  return;
+}
+
+      await Promise.all(
+        carrinho.map((anuncio) => {
+          return fetch('http://localhost:3001/compras', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({
+              anuncioId: anuncio.id,
+              compradorId: compradorId,
+            }),
+          });
+        })
+      );
+
       if (pagamento !== 'pix') {
-        localStorage.setItem('cartao', JSON.stringify({
-          numero: numeroCartao,
-          validade,
-          cvv,
-        }));
+        localStorage.setItem(
+          'cartao',
+          JSON.stringify({
+            numero: numeroCartao,
+            validade,
+            cvv,
+          })
+        );
       }
 
+      limparCarrinho();
       setCarregando(false);
       setFinalizarAberto(false);
       setFinalizado(true);
-      limparCarrinho();
+      setCarrinhoAberto(false);
 
       setTimeout(() => setFinalizado(false), 3000);
-    }, 2000);
+    } catch (error) {
+      console.error('Erro ao confirmar compra:', error);
+      alert('Ocorreu um erro ao finalizar a compra');
+      setCarregando(false);
+    }
   };
+
+
+
 
   return (
     <>
       <Box
         sx={{
           width: '100%',
-          height: '9%',
+          height: '12%',
           backgroundColor: '#003566',
           display: 'flex',
           alignItems: 'center',
@@ -120,10 +181,16 @@ function Header() {
               </>
             ) : (
               <>
-                <Button onClick={() => navigate('/')} sx={{ color: 'white', border: '1px solid white', borderRadius: 2 }}>
+                <Button
+                  onClick={() => navigate('/')}
+                  sx={{ color: 'white', border: '1px solid white', borderRadius: 2 }}
+                >
                   Entrar
                 </Button>
-                <Button onClick={() => navigate('/cadastro')} sx={{ color: 'white', border: '1px solid white', borderRadius: 2 }}>
+                <Button
+                  onClick={() => navigate('/cadastro')}
+                  sx={{ color: 'white', border: '1px solid white', borderRadius: 2 }}
+                >
                   Cadastrar
                 </Button>
               </>
@@ -134,38 +201,73 @@ function Header() {
 
       <Box sx={{ height: '70px' }} />
 
-      <Drawer anchor="right" open={menuAberto} onClose={() => setMenuAberto()} PaperProps={{
-        sx: {
-          mt: '80px', width: '250px', height: '40vh', borderRadius: '1px 1px 1px 20px', p: 2,
-        },
-      }}>
+      <Drawer
+        anchor="right"
+        open={menuAberto}
+        onClose={() => setMenuAberto(false)}
+        PaperProps={{
+          sx: {
+            mt: '75px',
+            width: '20%',
+            height: '50%',
+            borderRadius: '1px 1px 1px 20px',
+            p: 2,
+          },
+        }}
+      >
         <List sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {[{ label: 'Minha Conta', action: () => navegarPara('/minhaConta') },
-          { label: 'Registro de Vendas', action: () => navegarPara('/registroVendas') },
-          { label: 'Meus Anuncios', action: () => navegarPara('/meusAnuncio') },
-          { label: 'Sair', action: sair }].map(({ label, action }) => (
-            <ListItem button key={label} onClick={action} sx={{ borderRadius: '8px', bgcolor: '#f5f5f5', '&:hover': { bgcolor: '#e0e0e0' } }}>
+          {[
+            { label: 'Minha Conta', action: () => navegarPara('/minhaConta') },
+            { label: 'Registro de Vendas', action: () => navegarPara('/registroVendas') },
+            { label: 'Meus Anuncios', action: () => navegarPara('/meusAnuncio') },
+            { label: 'Sair', action: sair },
+          ].map(({ label, action }) => (
+            <ListItem
+              button
+              key={label}
+              onClick={action}
+              sx={{ borderRadius: '8px', bgcolor: '#f5f5f5', '&:hover': { bgcolor: '#e0e0e0' } }}
+            >
               <ListItemText primary={label} />
             </ListItem>
           ))}
         </List>
       </Drawer>
 
-      <Drawer anchor="right" open={carrinhoAberto} onClose={() => setCarrinhoAberto(false)} PaperProps={{
-        sx: {
-          mt: '80px', width: { xs: '90%', sm: '60%', md: '50%' }, height: { xs: '60%', sm: '70%', md: '80%' },
-          maxWidth: '600px', maxHeight: '800px', borderRadius: '1px 1px 1px 20px', p: 3, overflow: 'auto',
-        },
-      }}>
+      <Drawer
+        anchor="right"
+        open={carrinhoAberto}
+        onClose={() => setCarrinhoAberto(false)}
+        PaperProps={{
+          sx: {
+            mt: '80px',
+            width: { xs: '90%', sm: '60%', md: '50%' },
+            height: { xs: '60%', sm: '70%', md: '80%' },
+            maxWidth: '600px',
+            maxHeight: '800px',
+            borderRadius: '1px 1px 1px 20px',
+            p: 3,
+            overflow: 'auto',
+          },
+        }}
+      >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <Typography variant="h5" fontWeight="bold">Carrinho de Compras</Typography>
-          <IconButton onClick={() => setCarrinhoAberto(false)}><CloseIcon /></IconButton>
+          <Typography variant="h5" fontWeight="bold">
+            Carrinho de Compras
+          </Typography>
+          <IconButton onClick={() => setCarrinhoAberto(false)}>
+            <CloseIcon />
+          </IconButton>
         </Box>
 
         {carrinho.length === 0 ? (
-          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70%' }}>
+          <Box
+            sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70%' }}
+          >
             <ShoppingCartIcon sx={{ fontSize: 60, color: 'text.disabled', mb: 2 }} />
-            <Typography variant="h6" color="text.secondary">Seu carrinho está vazio</Typography>
+            <Typography variant="h6" color="text.secondary">
+              Seu carrinho está vazio
+            </Typography>
           </Box>
         ) : (
           <>
@@ -176,7 +278,10 @@ function Header() {
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography fontWeight="medium">{anuncio.titulo}</Typography>
                       <Typography variant="body2" color="text.secondary">
-                        R$ {Number(anuncio.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        R${' '}
+                        {Number(anuncio.preco ?? anuncio.valor ?? 0).toLocaleString('pt-BR', {
+                          minimumFractionDigits: 2,
+                        })}
                       </Typography>
                     </Box>
                   </ListItem>
@@ -189,11 +294,19 @@ function Header() {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
                 <Typography variant="h6">Total:</Typography>
                 <Typography variant="h6" fontWeight="bold">
-                  R$ {Number(total).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  R${' '}
+                  {Number(total).toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                  })}
                 </Typography>
               </Box>
-              <Button fullWidth variant="contained" size="large" onClick={() => setFinalizarAberto(true)}
-                sx={{ py: 1.5, backgroundColor: '#003566', '&:hover': { backgroundColor: '#002244' } }}>
+              <Button
+                fullWidth
+                variant="contained"
+                size="large"
+                onClick={() => setFinalizarAberto(true)}
+                sx={{ py: 1.5, backgroundColor: '#003566', '&:hover': { backgroundColor: '#002244' } }}
+              >
                 Finalizar Compra
               </Button>
             </Box>
@@ -208,15 +321,22 @@ function Header() {
             <Box key={anuncio.id} sx={{ mb: 2 }}>
               <Typography variant="subtitle1">{anuncio.titulo}</Typography>
               <Typography variant="body2" color="text.secondary">
-                R$ {Number(anuncio.valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                R${' '}
+                {Number(anuncio.preco ?? anuncio.valor ?? 0).toLocaleString('pt-BR', {
+                  minimumFractionDigits: 2,
+                })}
               </Typography>
+
               <Divider sx={{ mt: 1 }} />
             </Box>
           ))}
 
           <Box sx={{ mt: 2 }}>
             <Typography variant="h6">
-              Total: R$ {Number(total).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+              Total: R${' '}
+              {Number(total).toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+              })}
             </Typography>
           </Box>
 
@@ -259,14 +379,68 @@ function Header() {
             )}
 
             {pagamento === 'pix' && (
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                Você receberá um QR Code para pagamento via PIX.
-              </Typography>
+              <Box sx={{ mt: 2, textAlign: 'center' }}>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                  Você receberá um QR Code para pagamento via PIX.
+                </Typography>
+                <Box
+                  component="img"
+                  src="/pix-qrcode.jpg"
+                  alt="QR Code PIX"
+                  sx={{ width: 180, height: 180, margin: '0 auto', borderRadius: 2, boxShadow: 3 }}
+                />
+
+                <Box
+                  sx={{
+                    mt: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 1,
+                    bgcolor: '#f5f5f5',
+                    borderRadius: 1,
+                    p: 1,
+                    maxWidth: 400,
+                    mx: 'auto',
+                    userSelect: 'text',
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: 'monospace',
+                      fontSize: 14,
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-all',
+                      flexGrow: 1,
+                      textAlign: 'center',
+                    }}
+                  >
+                    00020101021126330014br.gov.bcb.pix0111110789239225204000053039865802BR5920EDUARDO
+                    CORREA GATTI6013FLORIANOPOLIS62070503***63049ADF
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => {
+                      navigator.clipboard
+                        .writeText(
+                          '00020101021126330014br.gov.bcb.pix0111110789239225204000053039865802BR5920EDUARDO CORREA GATTI6013FLORIANOPOLIS62070503***63049ADF'
+                        )
+                        .then(() => alert('Código PIX copiado!'))
+                        .catch(() => alert('Falha ao copiar código PIX'));
+                    }}
+                  >
+                    Copiar PIX
+                  </Button>
+                </Box>
+              </Box>
             )}
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setFinalizarAberto(false)} color="error">Cancelar</Button>
+          <Button onClick={() => setFinalizarAberto(false)} color="error">
+            Cancelar
+          </Button>
           <Button variant="contained" sx={{ backgroundColor: '#003566' }} onClick={confirmarCompra}>
             {carregando ? 'Processando...' : 'Confirmar Compra'}
           </Button>
