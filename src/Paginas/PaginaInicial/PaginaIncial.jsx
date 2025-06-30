@@ -188,7 +188,7 @@ function PaginaInicial() {
 
                     <Grid container spacing={3}>
                         {anunciosFiltrados.map((anuncio) => (
-                           <Grid item xs={12} sm={6} md={3} lg={3} key={anuncio.id} sx={{ display: 'flex' }}>
+                           <Grid item xs={12} sm={6} md={3} lg={3} key={anuncio.id} sx={{ display: 'flex' }}> 
                                 <Card
                                     sx={{
                                         display: 'flex',

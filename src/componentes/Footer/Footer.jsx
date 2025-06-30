@@ -65,20 +65,8 @@ function Footer() {
             </Link>
           </Grid>
 
-          {/* Policies */}
-          <Grid item xs={6} md={2}>
-            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
-              Políticas
-            </Typography>
-            <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
-              Termos de Serviço
-            </Link>
-            <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
-              Privacidade
-            </Link>
-          </Grid>
 
-          {/* Contact */}
+
           <Grid item xs={12} md={4}>
             <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
               Contato

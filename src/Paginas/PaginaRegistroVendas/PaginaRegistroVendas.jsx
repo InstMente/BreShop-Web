@@ -3,165 +3,127 @@ import { Box, Button, Container, Stack, TextField, Typography } from "@mui/mater
 import Footer from "../../componentes/Footer/Footer";
 import Header from "../../componentes/Header/Header";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 function PaginaRegistroVendas() {
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const anuncio = state?.anuncio;
 
   const [loading, setLoading] = useState(false);
-  const [compradorId, setCompradorId] = useState(null);
-  const [compradorEmail, setCompradorEmail] = useState('');
+  const [anuncios, setAnuncios] = useState([]);
+  const [precos, setPrecos] = useState({}); // objeto com chave = anuncio.id e valor = preco
 
   useEffect(() => {
-    // Pega email do localStorage e busca id do usuário
     const email = localStorage.getItem('user');
     if (!email) {
       alert('Usuário não autenticado.');
       navigate('/');
       return;
     }
-    setCompradorEmail(email);
 
-    async function buscarUsuario() {
+    async function buscarUsuarioEAnuncios() {
       try {
-        const res = await axios.get(`http://localhost:3001/usuarios/email/${email}`);
-        if (res.data?.id) {
-          setCompradorId(res.data.id);
+        const resUsuario = await axios.get(`http://localhost:3001/usuarios/email/${email}`);
+        const userId = resUsuario.data?.id;
+        if (!userId) throw new Error('Usuário não encontrado');
+
+        const resAnuncios = await axios.get(`http://localhost:3001/anuncios/vendidos/${userId}`);
+        const anunciosVendidos = resAnuncios.data;
+
+        if (anunciosVendidos.length > 0) {
+          setAnuncios(anunciosVendidos);
+
+          // Buscar o preço de cada anúncio vendido
+          anunciosVendidos.forEach(async anuncio => {
+            try {
+              const res = await axios.post('http://localhost:3001/compras/consultar', {
+                anuncio_id: anuncio.id
+              });
+
+              if (res.data && res.data.preco) {
+                setPrecos(prev => ({
+                  ...prev,
+                  [anuncio.id]: res.data.preco
+                }));
+              }
+            } catch (err) {
+              console.error(`Erro ao buscar venda do anúncio ${anuncio.id}`, err);
+            }
+          });
         } else {
-          alert('Usuário não encontrado no sistema.');
-          navigate('/');
+          alert('Nenhum anúncio vendido encontrado.');
+          navigate('/home');
         }
       } catch (error) {
-        console.error('Erro ao buscar usuário pelo email:', error);
-        alert('Erro no servidor ao buscar usuário.');
-        navigate('/');
+        console.error('Erro ao buscar usuário ou anúncios:', error);
+        alert('Erro ao carregar dados.');
+        navigate('/home');
       }
     }
-    buscarUsuario();
+
+    buscarUsuarioEAnuncios();
   }, [navigate]);
 
-  if (!anuncio) {
-    return (
-      <Box sx={{ p: 4 }}>
-        <Typography>Dados do anúncio não encontrados.</Typography>
-        <Button onClick={() => navigate('/home')}>Voltar</Button>
-      </Box>
-    );
-  }
-
-  const handleRegistrarVenda = async () => {
-    if (!compradorId) {
-      alert('Comprador ainda não carregado.');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await axios.post('http://localhost:3001/compras', {
-        anuncioId: anuncio.id,
-        compradorId: compradorId,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-
-      alert(response.data.mensagem || 'Venda registrada com sucesso!');
-      navigate('/home');
-    } catch (error) {
-      console.error(error);
-      alert('Erro ao registrar venda.');
-    }
-    setLoading(false);
-  };
-
   return (
-    <Box sx={{ m: 0, p: 0, height: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden' }}>
+    <Box sx={{ m: 0, p: 0, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
       <Box flexGrow={1} sx={{ p: 3 }}>
         <Button
           sx={{
             width: '9%',
-            top: 10,
             color: '#003566',
             borderRadius: '8px',
-            zIndex: 10,
             mb: 2
           }}
           onClick={() => navigate('/home')}
         >
-          <ArrowBackIosNewIcon
-            sx={{ ml: 2, color: '#003566', fontSize: '25px', mr: 1 }}
-          />
+          <ArrowBackIosNewIcon sx={{ ml: 2, color: '#003566', fontSize: '25px', mr: 1 }} />
           Voltar
         </Button>
 
-        <Container
-          sx={{
+        {anuncios.map(anuncio => (
+          <Container key={anuncio.id} sx={{
             mt: 2,
-            width: '100%',
-            height: '100%',
+            mb: 4,
             display: 'flex',
             justifyContent: 'space-around',
-            background: 'linear-gradient(195deg, #003566 50%,rgb(43, 36, 33) 100%)',
+            background: 'linear-gradient(195deg, #003566 50%, rgb(43, 36, 33) 100%)',
             borderRadius: '16px',
             padding: 4
-          }}
-        >
-          <Box
-            component='img'
-            src={anuncio.foto || "/image.png"}
-            alt={anuncio.titulo}
-            sx={{ width: '30%', borderRadius: '12px', objectFit: 'contain' }}
-          />
+          }}>
+            <Box
+              component='img'
+              src={anuncio.foto || "/image.png"}
+              alt={anuncio.titulo}
+              sx={{ width: '30%', borderRadius: '12px', objectFit: 'contain' }}
+            />
 
-          <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '65%', height: '100%' }}>
-            <Stack spacing={3} sx={{ width: '100%', height: '100%', flexDirection: 'column' }}>
-              <TextField
-                disabled
-                label='Título:'
-                type="text"
-                value={anuncio.titulo}
-                sx={{ backgroundColor: 'white', borderRadius: '12px' }}
-              />
-              <TextField
-                disabled
-                label='Descrição:'
-                type="text"
-                multiline
-                value={anuncio.descricao}
-                sx={{ backgroundColor: 'white', borderRadius: '12px' }}
-              />
-              <TextField
-                disabled
-                label="Preço:"
-                type="number"
-                value={Number(anuncio.preco).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                sx={{ backgroundColor: 'white', borderRadius: '12px' }}
-              />
-              <TextField
-                disabled
-                label="Comprador (email):"
-                type="text"
-                value={compradorEmail}
-                sx={{ backgroundColor: 'white', borderRadius: '12px' }}
-              />
+            <Box sx={{ p: 2, width: '65%' }}>
+              <Stack spacing={3}>
+                <TextField
+                  disabled
+                  label='Título:'
+                  value={anuncio.titulo}
+                  sx={{ backgroundColor: 'white', borderRadius: '12px' }}
+                />
+                <TextField
+                  disabled
+                  label='Descrição:'
+                  multiline
+                  value={anuncio.descricao}
+                  sx={{ backgroundColor: 'white', borderRadius: '12px' }}
+                />
+                <TextField
+                  disabled
+                  label='Preço:'
+                  value={Number(anuncio.preco).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                  sx={{ backgroundColor: 'white', borderRadius: '12px' }}
+                />
 
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ backgroundColor: '#003566', ":hover": { backgroundColor: 'rgb(10, 72, 131)' } }}
-                onClick={handleRegistrarVenda}
-                disabled={loading}
-              >
-                {loading ? 'Registrando...' : 'Registrar Venda'}
-              </Button>
-            </Stack>
-          </Box>
-        </Container>
+              </Stack>
+            </Box>
+          </Container>
+        ))}
       </Box>
       <Footer />
     </Box>
