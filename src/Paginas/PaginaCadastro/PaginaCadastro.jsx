@@ -31,7 +31,7 @@ function PaginaCadastro() {
         }
 
         try {
-            const resposta = await axios.post('http://localhost:3001/usuarios', {
+            const resposta = await axios.post('https://breshopbackend.onrender.com/usuarios', {
                 nome: usuario,
                 email,
                 telefone,

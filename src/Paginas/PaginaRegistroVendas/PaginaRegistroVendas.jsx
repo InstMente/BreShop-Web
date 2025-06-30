@@ -23,11 +23,11 @@ function PaginaRegistroVendas() {
 
     async function buscarUsuarioEAnuncios() {
       try {
-        const resUsuario = await axios.get(`http://localhost:3001/usuarios/email/${email}`);
+        const resUsuario = await axios.get(`https://breshopbackend.onrender.com/usuarios/email/${email}`);
         const userId = resUsuario.data?.id;
         if (!userId) throw new Error('Usuário não encontrado');
 
-        const resAnuncios = await axios.get(`http://localhost:3001/anuncios/vendidos/${userId}`);
+        const resAnuncios = await axios.get(`https://breshopbackend.onrender.com/anuncios/vendidos/${userId}`);
         const anunciosVendidos = resAnuncios.data;
 
         if (anunciosVendidos.length > 0) {
@@ -36,7 +36,7 @@ function PaginaRegistroVendas() {
           // Buscar o preço de cada anúncio vendido
           anunciosVendidos.forEach(async anuncio => {
             try {
-              const res = await axios.post('http://localhost:3001/compras/consultar', {
+              const res = await axios.post('https://breshopbackend.onrender.com/compras/consultar', {
                 anuncio_id: anuncio.id
               });
 

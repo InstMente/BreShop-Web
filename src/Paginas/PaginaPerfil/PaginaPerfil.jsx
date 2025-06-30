@@ -41,7 +41,7 @@
 
                                       try {
                                         const { data } = await axios.get(
-                                          `http://localhost:3001/usuarios/email/${email}`,
+                                          `https://breshopbackend.onrender.com/usuarios/email/${email}`,
                                           {
                                             headers: {
                                               Authorization: `Bearer ${token}`
@@ -78,7 +78,7 @@
 
                                     try {
                                       const { data } = await axios.put(
-                                        `http://localhost:3001/usuarios/${usuario.id}`,
+                                        `https://breshopbackend.onrender.com/usuarios/${usuario.id}`,
                                         payload,
                                         {
                                           headers: {

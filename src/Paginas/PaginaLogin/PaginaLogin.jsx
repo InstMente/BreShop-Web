@@ -22,7 +22,7 @@ function PaginaLogin() {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3001/usuarios/login', { email, senha });
+      const response = await axios.post('https://breshopbackend.onrender.com/usuarios/login', { email, senha });
 
       const { token } = response.data;
 

@@ -16,10 +16,10 @@ function PaginaMeusAnuncio() {
       if (!email) return alert('Usuário não autenticado');
 
       try {
-        const resUsuario = await axios.get(`http://localhost:3001/usuarios/email/${email}`);
+        const resUsuario = await axios.get(`https://breshopbackend.onrender.com/usuarios/email/${email}`);
         const usuarioId = resUsuario.data.id;
 
-        const res = await axios.get(`http://localhost:3001/anuncios/usuario/${usuarioId}`);
+        const res = await axios.get(`https://breshopbackend.onrender.com/anuncios/usuario/${usuarioId}`);
         setMeusAnuncios(res.data);
       } catch (err) {
         console.error(err);
@@ -33,7 +33,7 @@ function PaginaMeusAnuncio() {
   const deletarAnuncio = async (id) => {
     if (!window.confirm('Tem certeza que deseja excluir este anúncio?')) return;
     try {
-      await axios.delete(`http://localhost:3001/anuncios/${id}`);
+      await axios.delete(`https://breshopbackend.onrender.com/anuncios/${id}`);
       setMeusAnuncios(prev => prev.filter(a => a.id !== id));
       alert('Anúncio excluído com sucesso!');
     } catch (error) {

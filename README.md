@@ -10,8 +10,6 @@ Uma plataforma exclusiva para a compra e venda de roupas, oferecendo uma experi�
 
 [Michael D. Nazário](https://github.com/mdnazario)
 
-[Pedro H. da Silva Salles](https://github.com/pedroking2310)
-
 [Robert V. Nazário](https://github.com/rvnaza)
 
 ## 📊 Estatísticas do Projeto
@@ -45,7 +43,7 @@ Uma plataforma exclusiva para a compra e venda de roupas, oferecendo uma experi�
   - Atualizar o status do anúncio (disponível, vendido, etc.).
 
 ### RF04: Edição de Perfil
-**Responsável:** [Pedro H. da Silva Salles](https://github.com/pedroking2310)
+**Responsável:** [Michael D. Nazário](https://github.com/mdnazario)
 **Descrição:** Permitir que o usuário edite seu perfil pessoal.
 **Funcionalidades:**
   - Alteração de dados como nome, foto, informações de contato, etc.
@@ -69,6 +67,4 @@ Uma plataforma exclusiva para a compra e venda de roupas, oferecendo uma experi�
 **Responsável:** [Eduardo C. Gatti](https://github.com/eduardgatti)
 **Descrição:** Permitir que os usuários filtrem os anúncios de roupas de acordo com diferentes critérios.
 **Funcionalidades:**
-  - Filtro por categoria (tipo de roupa, tamanho, cor, etc.).
-  - Filtro por preço, condição da peça, localização do vendedor.
-  - Opção de ordenar resultados por relevância, preço ou data de postagem.
+  - Filtrar automaticamente os anúncios baseado no nome.

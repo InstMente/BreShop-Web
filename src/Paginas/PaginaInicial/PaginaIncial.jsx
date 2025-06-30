@@ -64,7 +64,7 @@ function PaginaInicial() {
         // Busca anúncios do backend
         async function fetchAnuncios() {
             try {
-                const response = await axios.get('http://localhost:3001/anuncios');
+                const response = await axios.get('https://breshopbackend.onrender.com/anuncios');
                 setAnuncios(response.data);
             } catch (error) {
                 console.error('Erro ao buscar anúncios:', error);
@@ -97,7 +97,7 @@ function PaginaInicial() {
                 return;
             }
 
-            const resUsuario = await axios.get(`http://localhost:3001/usuarios/email/${email}`);
+            const resUsuario = await axios.get(`https://breshopbackend.onrender.com/usuarios/email/${email}`);
             const usuarioId = resUsuario.data.id;
 
             if (!usuarioId) {
@@ -119,7 +119,7 @@ function PaginaInicial() {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
             };
 
-            const resposta = await axios.post('http://localhost:3001/anuncios', novoAnuncio, config);
+            const resposta = await axios.post('https://breshopbackend.onrender.com/anuncios', novoAnuncio, config);
 
             setAnuncios(prev => [...prev, { id: resposta.data.id, ...novoAnuncio }]);
 

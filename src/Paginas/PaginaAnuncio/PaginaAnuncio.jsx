@@ -27,7 +27,7 @@ function PaginaAnuncio() {
       setErroUsuario(null);
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://localhost:3001/usuarios/${userId}`, {
+        const response = await axios.get(`https://breshopbackend.onrender.com/usuarios/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
