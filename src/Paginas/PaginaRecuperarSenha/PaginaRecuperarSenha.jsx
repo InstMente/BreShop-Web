@@ -27,7 +27,6 @@ function PaginaRecuperarSenha() {
       });
 
       alert('Senha atualizada com sucesso!');
-      // Opcional: limpar os campos
       setEmail('');
       setSenha('');
       setConfirmar('');
