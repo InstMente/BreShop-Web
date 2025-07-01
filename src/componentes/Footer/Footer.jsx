@@ -57,11 +57,14 @@ function Footer() {
             <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600 }}>
               Links Rápidos
             </Typography>
-            <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
+            <Link href="/home" color="inherit" underline="hover" display="block" mb={1}>
               Início
             </Link>
-            <Link href="#" color="inherit" underline="hover" display="block" mb={1}>
+            <Link href="https://github.com/InstMente/BreShop-Web" color="inherit" underline="hover" display="block" mb={1}>
               Sobre Nós
+            </Link>
+            <Link href="https://wa.me/554896726930" color="inherit" underline="hover" display="block" mb={1}>
+              Suporte
             </Link>
           </Grid>
 

@@ -23,19 +23,21 @@ import SearchIcon from '@mui/icons-material/Search';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const estiloModal = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: { xs: '90vw', sm: '70vw', md: 400 },  // responsivo, no mobile usa 90% da largura da viewport
+    maxHeight: '90vh', // para não ultrapassar a tela
+    overflowY: 'auto',
     bgcolor: 'background.paper',
     borderRadius: 2,
     boxShadow: 24,
-    p: 4,
+    p: { xs: 2, sm: 4 }, // padding responsivo
 };
-
 function PaginaInicial() {
     const [abrirModal, setAbrirModal] = useState(false);
     const [titulo, setTitulo] = useState('');
@@ -93,7 +95,7 @@ function PaginaInicial() {
         try {
             const email = localStorage.getItem('user');
             if (!email) {
-                alert('Usuário não autenticado.');
+                toast.error('Usuário não autenticado.');
                 return;
             }
 
@@ -101,7 +103,7 @@ function PaginaInicial() {
             const usuarioId = resUsuario.data.id;
 
             if (!usuarioId) {
-                alert('Usuário não encontrado.');
+                toast.error('Usuário não encontrado.');
                 return;
             }
 
@@ -123,7 +125,7 @@ function PaginaInicial() {
 
             setAnuncios(prev => [...prev, { id: resposta.data.id, ...novoAnuncio }]);
 
-            alert('Anúncio cadastrado com sucesso!');
+            toast.info('Anúncio cadastrado com sucesso!');
             setTitulo('');
             setDescricao('');
             setPreco('');
@@ -132,7 +134,7 @@ function PaginaInicial() {
             setAbrirModal(false);
         } catch (error) {
             console.error('Erro ao cadastrar anúncio:', error);
-            alert('Erro ao cadastrar anúncio.');
+            toast.error('Erro ao cadastrar anúncio.');
         }
     };
 
@@ -186,23 +188,20 @@ function PaginaInicial() {
                         </Button>
                     </Box>
 
-                    <Grid container spacing={3}>
+                    <Grid container spacing={1} justifyContent="center">
                         {anunciosFiltrados.map((anuncio) => (
-                           <Grid item xs={12} sm={6} md={3} lg={3} key={anuncio.id} sx={{ display: 'flex' }}> 
+                            <Grid item key={anuncio.id} sx={{ display: 'flex', justifyContent: 'center' }}>
                                 <Card
                                     sx={{
+                                        width: 280,             // largura fixa do card
+                                        flexShrink: 0,          // não encolhe
                                         display: 'flex',
                                         flexDirection: 'column',
                                         backgroundColor: '#fff',
-                                        borderRadius: '4px',
-                                        boxShadow: '0 1px 1px 0 rgba(0,0,0,.1)',
-                                        transition: 'box-shadow .3s',
-                                        '&:hover': {
-                                            boxShadow: '0 7px 11px 0 rgba(0,0,0,.1)'
-                                        },
+                                        borderRadius: 2,
+                                        boxShadow: '0 1px 1px rgba(0,0,0,0.1)',
                                         cursor: 'pointer',
-                                        width: '100%',
-                                        height: 400, // altura fixa do card
+                                        minHeight: 400,
                                     }}
                                     onClick={() => navegar('/anuncio', { state: { anuncio } })}
                                 >
@@ -212,24 +211,16 @@ function PaginaInicial() {
                                             image={anuncio.foto}
                                             alt={anuncio.titulo}
                                             sx={{
-                                                height: 180,     // altura fixa para a imagem
                                                 width: '100%',
-                                                objectFit: 'cover',  // cobre toda área da imagem, pode cortar, mas mantém tamanho fixo do card
-                                                borderTopLeftRadius: 4,
-                                                borderTopRightRadius: 4,
-                                                flexShrink: 0,   // evita que encolha
+                                                height: 180,
+                                                objectFit: 'cover',
+                                                borderTopLeftRadius: 8,
+                                                borderTopRightRadius: 8,
+                                                flexShrink: 0,
                                             }}
                                         />
                                     )}
-                                    <CardContent
-                                        sx={{
-                                            flexGrow: 1,    // faz ocupar todo espaço restante
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            justifyContent: 'space-between',
-                                            p: 2
-                                        }}
-                                    >
+                                    <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', p: 2 }}>
                                         <Box>
                                             <Typography
                                                 variant="body1"

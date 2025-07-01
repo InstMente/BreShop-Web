@@ -5,6 +5,7 @@ import Header from "../../componentes/Header/Header";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function PaginaRegistroVendas() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ function PaginaRegistroVendas() {
   useEffect(() => {
     const email = localStorage.getItem('user');
     if (!email) {
-      alert('Usuário não autenticado.');
+      toast.error('Usuário não autenticado.');
       navigate('/');
       return;
     }
@@ -51,12 +52,12 @@ function PaginaRegistroVendas() {
             }
           });
         } else {
-          alert('Nenhum anúncio vendido encontrado.');
+          toast.error('Nenhum anúncio vendido encontrado.');
           navigate('/home');
         }
       } catch (error) {
         console.error('Erro ao buscar usuário ou anúncios:', error);
-        alert('Erro ao carregar dados.');
+        toast.error('Erro ao carregar dados.');
         navigate('/home');
       }
     }

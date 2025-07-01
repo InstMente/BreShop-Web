@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { formatarComMascara, MASCARA_CPF, MASCARA_CELULAR, MASCARA_CEP } from '../../utils/mascaras';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function PaginaCadastro() {
     const [usuario, setUsuario] = useState('');
@@ -23,12 +24,12 @@ function PaginaCadastro() {
 
     const handleCadastro = async () => {
         if (!usuario || !email || !telefone || !dataNascimento || !cpf || !cep || !cidade || !bairro || !rua || !numero || !senha || !confirmarSenha) {
-            alert('Por favor, preencha todos os campos!');
+            toast.error('Por favor, preencha todos os campos!');
             return;
         }
 
         if (senha !== confirmarSenha) {
-            alert('As senhas não coincidem!');
+            toast.error('As senhas não coincidem!');
             return;
         }
 
@@ -48,7 +49,7 @@ function PaginaCadastro() {
             });
 
             if (resposta.status === 201) {
-                alert('Cadastro realizado com sucesso!');
+                toast.info('Cadastro realizado com sucesso!');
                 setUsuario('');
                 setEmail('');
                 setTelefone('');
@@ -65,9 +66,9 @@ function PaginaCadastro() {
             }
         } catch (erro) {
             if (erro.response) {
-                alert(erro.response.data.mensagem || erro.response.data.erro || 'Erro no cadastro');
+                toast.error(erro.response.data.mensagem || erro.response.data.erro || 'Erro no cadastro');
             } else {
-                alert('Erro na conexão com o servidor');
+                toast.error('Erro na conexão com o servidor');
             }
         }
     };
@@ -75,40 +76,59 @@ function PaginaCadastro() {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', overflowX: 'hidden' }}>
             <Header />
-            <Box sx={{ flexGrow: 1, p: 10, overflowY: 'auto' }}>
-                <Container sx={{
-                    width: '25%',
-                    backgroundColor: '#F2F0EF',
-                    boxShadow: '4px 4px 4px rgba(0,0,0,0.1)',
-                    borderRadius: '10px',
-                }}>
-                    <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 4 }}>
-                        <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: '800', color: "#003566" }}>Cadastro</h1>
+            <Box sx={{ flexGrow: 1, p: { xs: 2, md: 10 }, overflowY: 'auto' }}>
+                <Container
+                    maxWidth="sm"
+                    sx={{
+                        backgroundColor: '#F2F0EF',
+                        boxShadow: '4px 4px 4px rgba(0,0,0,0.1)',
+                        borderRadius: '10px',
+                        px: { xs: 2, sm: 4 },
+                        py: 4,
+                    }}
+                >
+                    <form onSubmit={(e) => { e.preventDefault(); handleCadastro(); }}>
+                    <Stack spacing={2}>
+                        <Typography
+                            variant="h4"
+                            sx={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 800, color: '#003566', textAlign: 'center' }}
+                        >
+                            Cadastro
+                        </Typography>
 
-                        <TextField label="Usuário:" value={usuario} onChange={(e) => setUsuario(e.target.value)} sx={{ width: '100%' }} />
-                        <TextField label="Email:" value={email} onChange={(e) => setEmail(e.target.value)} sx={{ width: '100%' }} />
-                        <TextField label="Telefone:" value={telefone} onChange={(e) => setTelefone(formatarComMascara(e.target.value, MASCARA_CELULAR))} sx={{ width: '100%' }} />
-                        <TextField type="date" label="Data de Nascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
-                        <TextField label="CPF:" value={cpf} onChange={(e) => setCpf(formatarComMascara(e.target.value, MASCARA_CPF))} sx={{ width: '100%' }} />
-                        <TextField label="CEP:" value={cep} onChange={(e) => setCep(formatarComMascara(e.target.value, MASCARA_CEP))} sx={{ width: '100%' }} />
-                        <TextField label="Cidade:" value={cidade} onChange={(e) => setCidade(e.target.value)} sx={{ width: '100%' }} />
-                        <TextField label="Bairro:" value={bairro} onChange={(e) => setBairro(e.target.value)} sx={{ width: '100%' }} />
-                        <TextField label="Rua:" value={rua} onChange={(e) => setRua(e.target.value)} sx={{ width: '100%' }} />
-                        <TextField label="Número:" value={numero} onChange={(e) => setNumero(e.target.value)} sx={{ width: '100%' }} />
-                        <TextField label="Senha:" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} sx={{ width: '100%' }} />
-                        <TextField label="Confirmar Senha:" type="password" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} sx={{ width: '100%' }} />
-                        <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, width:'100%' }}>
-                            <Button sx={{ width: '100%', backgroundColor: '#00509d', '&:hover': { backgroundColor: '#003566' } }} variant="contained" onClick={handleCadastro}>
+                        <TextField label="Usuário:" value={usuario} onChange={(e) => setUsuario(e.target.value)} fullWidth />
+                        <TextField label="Email:" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
+                        <TextField label="Telefone:" value={telefone} onChange={(e) => setTelefone(formatarComMascara(e.target.value, MASCARA_CELULAR))} fullWidth />
+                        <TextField type="date" label="Data de Nascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} InputLabelProps={{ shrink: true }} fullWidth />
+                        <TextField label="CPF:" value={cpf} onChange={(e) => setCpf(formatarComMascara(e.target.value, MASCARA_CPF))} fullWidth />
+                        <TextField label="CEP:" value={cep} onChange={(e) => setCep(formatarComMascara(e.target.value, MASCARA_CEP))} fullWidth />
+                        <TextField label="Cidade:" value={cidade} onChange={(e) => setCidade(e.target.value)} fullWidth />
+                        <TextField label="Bairro:" value={bairro} onChange={(e) => setBairro(e.target.value)} fullWidth />
+                        <TextField label="Rua:" value={rua} onChange={(e) => setRua(e.target.value)} fullWidth />
+                        <TextField label="Número:" value={numero} onChange={(e) => setNumero(e.target.value)} fullWidth />
+                        <TextField label="Senha:" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} fullWidth />
+                        <TextField label="Confirmar Senha:" type="password" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} fullWidth />
+
+                        <Stack sx={{ justifyContent: 'center', alignItems: 'center', gap: 2 }}>
+                            <Button
+                                type="submit"
+                                sx={{ width: '100%', maxWidth: '250px', backgroundColor: '#00509d', '&:hover': { backgroundColor: '#003566' } }}
+                                variant="contained"
+                            >
                                 Cadastrar
                             </Button>
-                            <Typography sx={{ color: '#003566' }}>Já possui conta? <a style={{ color: '#003566' }} href='/'>Entrar</a></Typography>
+                            <Typography sx={{ color: '#003566', textAlign: 'center' }}>
+                                Já possui conta? <a style={{ color: '#003566', textDecoration: 'underline', cursor: 'pointer' }} onClick={() => {navigate('/')}}>Entrar</a>
+                            </Typography>
                         </Stack>
                     </Stack>
+                    </form>
                 </Container>
             </Box>
             <Footer />
         </Box>
     );
+
 }
 
 export default PaginaCadastro;

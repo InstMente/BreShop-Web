@@ -86,7 +86,7 @@ if (!userString) {
 
 let compradorId = null;
 try {
-  const resposta = await fetch(`http://localhost:3001/usuarios/email/${userString}`);
+  const resposta = await fetch(`https://breshopbackend.onrender.com/usuarios/email/${userString}`);
   const dados = await resposta.json();
 
   if (!resposta.ok || !dados.id) {
@@ -105,7 +105,7 @@ try {
 
       await Promise.all(
         carrinho.map((anuncio) => {
-          return fetch('http://localhost:3001/compras', {
+          return fetch('https://breshopbackend.onrender.com/compras', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
