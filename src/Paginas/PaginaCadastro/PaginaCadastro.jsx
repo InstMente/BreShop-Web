@@ -4,6 +4,7 @@ import Footer from '../../componentes/Footer/Footer';
 import { useState } from 'react';
 import { formatarComMascara, MASCARA_CPF, MASCARA_CELULAR, MASCARA_CEP } from '../../utils/mascaras';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function PaginaCadastro() {
     const [usuario, setUsuario] = useState('');
@@ -18,6 +19,7 @@ function PaginaCadastro() {
     const [numero, setNumero] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmarSenha, setConfirmarSenha] = useState('');
+    const navigate = useNavigate();
 
     const handleCadastro = async () => {
         if (!usuario || !email || !telefone || !dataNascimento || !cpf || !cep || !cidade || !bairro || !rua || !numero || !senha || !confirmarSenha) {
@@ -59,6 +61,7 @@ function PaginaCadastro() {
                 setNumero('');
                 setSenha('');
                 setConfirmarSenha('');
+                navigate('/');
             }
         } catch (erro) {
             if (erro.response) {
@@ -74,7 +77,7 @@ function PaginaCadastro() {
             <Header />
             <Box sx={{ flexGrow: 1, p: 10, overflowY: 'auto' }}>
                 <Container sx={{
-                    width: '400px',
+                    width: '25%',
                     backgroundColor: '#F2F0EF',
                     boxShadow: '4px 4px 4px rgba(0,0,0,0.1)',
                     borderRadius: '10px',
@@ -82,20 +85,20 @@ function PaginaCadastro() {
                     <Stack spacing={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', p: 4 }}>
                         <h1 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: '800', color: "#003566" }}>Cadastro</h1>
 
-                        <TextField label="Usuário:" value={usuario} onChange={(e) => setUsuario(e.target.value)} sx={{ width: '300px' }} />
-                        <TextField label="Email:" value={email} onChange={(e) => setEmail(e.target.value)} sx={{ width: '300px' }} />
-                        <TextField label="Telefone:" value={telefone} onChange={(e) => setTelefone(formatarComMascara(e.target.value, MASCARA_CELULAR))} sx={{ width: '300px' }} />
-                        <TextField type="date" label="Data de Nascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} InputLabelProps={{ shrink: true }} sx={{ width: '300px' }} />
-                        <TextField label="CPF:" value={cpf} onChange={(e) => setCpf(formatarComMascara(e.target.value, MASCARA_CPF))} sx={{ width: '300px' }} />
-                        <TextField label="CEP:" value={cep} onChange={(e) => setCep(formatarComMascara(e.target.value, MASCARA_CEP))} sx={{ width: '300px' }} />
-                        <TextField label="Cidade:" value={cidade} onChange={(e) => setCidade(e.target.value)} sx={{ width: '300px' }} />
-                        <TextField label="Bairro:" value={bairro} onChange={(e) => setBairro(e.target.value)} sx={{ width: '300px' }} />
-                        <TextField label="Rua:" value={rua} onChange={(e) => setRua(e.target.value)} sx={{ width: '300px' }} />
-                        <TextField label="Número:" value={numero} onChange={(e) => setNumero(e.target.value)} sx={{ width: '300px' }} />
-                        <TextField label="Senha:" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} sx={{ width: '300px' }} />
-                        <TextField label="Confirmar Senha:" type="password" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} sx={{ width: '300px' }} />
-                        <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                            <Button sx={{ width: '250px', backgroundColor: '#00509d', '&:hover': { backgroundColor: '#003566' } }} variant="contained" onClick={handleCadastro}>
+                        <TextField label="Usuário:" value={usuario} onChange={(e) => setUsuario(e.target.value)} sx={{ width: '100%' }} />
+                        <TextField label="Email:" value={email} onChange={(e) => setEmail(e.target.value)} sx={{ width: '100%' }} />
+                        <TextField label="Telefone:" value={telefone} onChange={(e) => setTelefone(formatarComMascara(e.target.value, MASCARA_CELULAR))} sx={{ width: '100%' }} />
+                        <TextField type="date" label="Data de Nascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} InputLabelProps={{ shrink: true }} sx={{ width: '100%' }} />
+                        <TextField label="CPF:" value={cpf} onChange={(e) => setCpf(formatarComMascara(e.target.value, MASCARA_CPF))} sx={{ width: '100%' }} />
+                        <TextField label="CEP:" value={cep} onChange={(e) => setCep(formatarComMascara(e.target.value, MASCARA_CEP))} sx={{ width: '100%' }} />
+                        <TextField label="Cidade:" value={cidade} onChange={(e) => setCidade(e.target.value)} sx={{ width: '100%' }} />
+                        <TextField label="Bairro:" value={bairro} onChange={(e) => setBairro(e.target.value)} sx={{ width: '100%' }} />
+                        <TextField label="Rua:" value={rua} onChange={(e) => setRua(e.target.value)} sx={{ width: '100%' }} />
+                        <TextField label="Número:" value={numero} onChange={(e) => setNumero(e.target.value)} sx={{ width: '100%' }} />
+                        <TextField label="Senha:" type="password" value={senha} onChange={(e) => setSenha(e.target.value)} sx={{ width: '100%' }} />
+                        <TextField label="Confirmar Senha:" type="password" value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)} sx={{ width: '100%' }} />
+                        <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2, width:'100%' }}>
+                            <Button sx={{ width: '100%', backgroundColor: '#00509d', '&:hover': { backgroundColor: '#003566' } }} variant="contained" onClick={handleCadastro}>
                                 Cadastrar
                             </Button>
                             <Typography sx={{ color: '#003566' }}>Já possui conta? <a style={{ color: '#003566' }} href='/'>Entrar</a></Typography>
