@@ -87,28 +87,29 @@ function PaginaAnuncio() {
       <Button
         sx={{
           position: 'fixed',
-          top: '80px',
-          left: '20px',
+          top: { xs: '75px', sm: '80px' },
+          left: { xs: '10px', sm: '20px' },
           color: 'white',
-          p: 1,
+          p: { xs: 0.5, sm: 1 },
           borderRadius: '6px',
           zIndex: 1000,
           textTransform: 'none',
-          fontSize: '0.875rem',
+          fontSize: { xs: '0.75rem', sm: '0.875rem' },
           backgroundColor: '#003566',
           backdropFilter: 'blur(4px)',
           '&:hover': { backgroundColor: 'rgb(15, 70, 122)' },
           display: 'flex',
           alignItems: 'center',
-          gap: '4px'
+          gap: '4px',
+          minWidth: { xs: '70px', sm: '120px' }
         }}
         onClick={() => navigate(-1)}
       >
-        <ArrowBackIosNewIcon sx={{ fontSize: '16px' }} />
+        <ArrowBackIosNewIcon sx={{ fontSize: { xs: '14px', sm: '16px' } }} />
         Voltar
       </Button>
 
-      <Box sx={{ flexGrow: 1, p: 3, mt: 4, width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
+      <Box sx={{ flexGrow: 1, p: { xs: 2, sm: 3 }, mt: 12, width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
         <Stack spacing={3} sx={{ width: '100%' }}>
           <Container
             maxWidth={false}
@@ -126,7 +127,7 @@ function PaginaAnuncio() {
             <Box
               sx={{
                 width: { xs: '100%', md: '50%' },
-                minHeight: '300px',
+                minHeight: { xs: '250px', md: '300px' },
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -140,23 +141,62 @@ function PaginaAnuncio() {
                 component="img"
                 src={foto}
                 alt="img-produto"
-                sx={{ width: '100%', height: 'auto', maxHeight: '400px', objectFit: 'contain', mixBlendMode: 'multiply' }}
+                sx={{
+                  width: '100%',
+                  maxWidth: { xs: '100%', md: '400px' },
+                  height: 'auto',
+                  maxHeight: { xs: '300px', md: '400px' },
+                  objectFit: 'contain',
+                  mixBlendMode: 'multiply'
+                }}
               />
             </Box>
 
             <Box sx={{ width: { xs: '100%', md: '50%' }, display: 'flex', flexDirection: 'column' }}>
-              <Typography variant="h4" sx={{ color: '#212121', fontWeight: '600', mb: 2, fontSize: { xs: '24px', md: '28px' }, lineHeight: '1.3' }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  color: '#212121',
+                  fontWeight: '600',
+                  mb: 2,
+                  fontSize: { xs: '22px', sm: '24px', md: '28px' },
+                  lineHeight: '1.3'
+                }}
+              >
                 {titulo}
               </Typography>
-              <Chip label="Novo" color="success" size="small" sx={{ alignSelf: 'flex-start', mb: 1, fontSize: '0.75rem', fontWeight: '600' }} />
+              <Chip
+                label="Novo"
+                color="success"
+                size="small"
+                sx={{ alignSelf: 'flex-start', mb: 1, fontSize: '0.75rem', fontWeight: '600' }}
+              />
 
-              <Typography variant="h3" sx={{ color: '#212121', fontWeight: '400', mb: 3, fontSize: { xs: '28px', md: '32px' }, letterSpacing: '0.5px' }}>
+              <Typography
+                variant="h3"
+                sx={{
+                  color: '#212121',
+                  fontWeight: '400',
+                  mb: 3,
+                  fontSize: { xs: '24px', sm: '28px', md: '32px' },
+                  letterSpacing: '0.5px'
+                }}
+              >
                 {`R$ ${Number(preco).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
               </Typography>
 
               <Divider sx={{ my: 2 }} />
 
-              <Typography variant="body1" sx={{ color: '#424242', mb: 3, fontSize: '16px', lineHeight: '1.6', wordBreak: 'break-word' }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: '#424242',
+                  mb: 3,
+                  fontSize: { xs: '14px', sm: '16px' },
+                  lineHeight: '1.6',
+                  wordBreak: 'break-word'
+                }}
+              >
                 {descricao}
               </Typography>
 
@@ -164,7 +204,16 @@ function PaginaAnuncio() {
                 <Button
                   fullWidth
                   variant="contained"
-                  sx={{ backgroundColor: '#003566', color: '#fff', py: 1.5, borderRadius: '4px', fontSize: '16px', textTransform: 'none', fontWeight: '500', '&:hover': { backgroundColor: 'rgb(25, 67, 131)' } }}
+                  sx={{
+                    backgroundColor: '#003566',
+                    color: '#fff',
+                    py: 1.5,
+                    borderRadius: '4px',
+                    fontSize: { xs: '14px', sm: '16px' },
+                    textTransform: 'none',
+                    fontWeight: '500',
+                    '&:hover': { backgroundColor: 'rgb(25, 67, 131)' }
+                  }}
                   onClick={() => adicionarCarrinho(anuncio)}
                 >
                   Adicionar ao carrinho
@@ -185,7 +234,7 @@ function PaginaAnuncio() {
               gap: 3
             }}
           >
-            <Typography variant="h5" sx={{ color: '#212121', fontWeight: '500', fontSize: '20px' }}>
+            <Typography variant="h5" sx={{ color: '#212121', fontWeight: '500', fontSize: { xs: '18px', md: '20px' } }}>
               Informações do vendedor
             </Typography>
 
@@ -199,16 +248,28 @@ function PaginaAnuncio() {
                 <Box sx={{ flex: 1 }}>
                   <Stack spacing={2.5}>
                     <Box>
-                      <Typography sx={{ color: '#757575', fontSize: '14px', fontWeight: '500', mb: 0.5 }}>Nome</Typography>
-                      <Typography sx={{ color: '#212121', fontSize: '16px', fontWeight: '400' }}>{usuario.nome}</Typography>
+                      <Typography sx={{ color: '#757575', fontSize: { xs: '12px', md: '14px' }, fontWeight: '500', mb: 0.5 }}>
+                        Nome
+                      </Typography>
+                      <Typography sx={{ color: '#212121', fontSize: { xs: '14px', md: '16px' }, fontWeight: '400' }}>
+                        {usuario.nome}
+                      </Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ color: '#757575', fontSize: '14px', fontWeight: '500', mb: 0.5 }}>Email</Typography>
-                      <Typography sx={{ color: '#212121', fontSize: '16px', fontWeight: '400' }}>{usuario.email}</Typography>
+                      <Typography sx={{ color: '#757575', fontSize: { xs: '12px', md: '14px' }, fontWeight: '500', mb: 0.5 }}>
+                        Email
+                      </Typography>
+                      <Typography sx={{ color: '#212121', fontSize: { xs: '14px', md: '16px' }, fontWeight: '400' }}>
+                        {usuario.email}
+                      </Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ color: '#757575', fontSize: '14px', fontWeight: '500', mb: 0.5 }}>Telefone</Typography>
-                      <Typography sx={{ color: '#212121', fontSize: '16px', fontWeight: '400' }}>{usuario.telefone || usuario.numero || 'Não informado'}</Typography>
+                      <Typography sx={{ color: '#757575', fontSize: { xs: '12px', md: '14px' }, fontWeight: '500', mb: 0.5 }}>
+                        Telefone
+                      </Typography>
+                      <Typography sx={{ color: '#212121', fontSize: { xs: '14px', md: '16px' }, fontWeight: '400' }}>
+                        {usuario.telefone || usuario.numero || 'Não informado'}
+                      </Typography>
                     </Box>
                   </Stack>
                 </Box>
@@ -216,16 +277,28 @@ function PaginaAnuncio() {
                 <Box sx={{ flex: 1 }}>
                   <Stack spacing={2.5}>
                     <Box>
-                      <Typography sx={{ color: '#757575', fontSize: '14px', fontWeight: '500', mb: 0.5 }}>Cidade</Typography>
-                      <Typography sx={{ color: '#212121', fontSize: '16px', fontWeight: '400' }}>{usuario.cidade}</Typography>
+                      <Typography sx={{ color: '#757575', fontSize: { xs: '12px', md: '14px' }, fontWeight: '500', mb: 0.5 }}>
+                        Cidade
+                      </Typography>
+                      <Typography sx={{ color: '#212121', fontSize: { xs: '14px', md: '16px' }, fontWeight: '400' }}>
+                        {usuario.cidade}
+                      </Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ color: '#757575', fontSize: '14px', fontWeight: '500', mb: 0.5 }}>Endereço</Typography>
-                      <Typography sx={{ color: '#212121', fontSize: '16px', fontWeight: '400' }}>{usuario.rua || 'Não informado'}</Typography>
+                      <Typography sx={{ color: '#757575', fontSize: { xs: '12px', md: '14px' }, fontWeight: '500', mb: 0.5 }}>
+                        Endereço
+                      </Typography>
+                      <Typography sx={{ color: '#212121', fontSize: { xs: '14px', md: '16px' }, fontWeight: '400' }}>
+                        {usuario.rua || 'Não informado'}
+                      </Typography>
                     </Box>
                     <Box>
-                      <Typography sx={{ color: '#757575', fontSize: '14px', fontWeight: '500', mb: 0.5 }}>CEP</Typography>
-                      <Typography sx={{ color: '#212121', fontSize: '16px', fontWeight: '400' }}>{usuario.cep || 'Não informado'}</Typography>
+                      <Typography sx={{ color: '#757575', fontSize: { xs: '12px', md: '14px' }, fontWeight: '500', mb: 0.5 }}>
+                        CEP
+                      </Typography>
+                      <Typography sx={{ color: '#212121', fontSize: { xs: '14px', md: '16px' }, fontWeight: '400' }}>
+                        {usuario.cep || 'Não informado'}
+                      </Typography>
                     </Box>
                   </Stack>
                 </Box>
