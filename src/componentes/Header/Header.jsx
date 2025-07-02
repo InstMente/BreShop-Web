@@ -74,7 +74,6 @@ function Header() {
 
   const confirmarCompra = async () => {
     setCarregando(true);
-
     try {
 const userString = localStorage.getItem('user');
 
@@ -136,7 +135,7 @@ try {
       setFinalizado(true);
       setCarrinhoAberto(false);
 
-      setTimeout(() => setFinalizado(false), 3000);
+      setTimeout(() => {setFinalizado(false);  navigate('/home');}, 3000);
     } catch (error) {
       console.error('Erro ao confirmar compra:', error);
       alert('Ocorreu um erro ao finalizar a compra');
@@ -443,11 +442,12 @@ try {
           </Button>
           <Button variant="contained" sx={{ backgroundColor: '#003566' }} onClick={confirmarCompra}>
             {carregando ? 'Processando...' : 'Confirmar Compra'}
+            
           </Button>
         </DialogActions>
       </Dialog>
 
-      <Dialog open={finalizado} onClose={() => setFinalizado(false)}>
+      <Dialog open={finalizado} onClose={() => {setFinalizado(false)}}>
         <DialogContent sx={{ textAlign: 'center', p: 4 }}>
           <Box
             sx={{
@@ -478,7 +478,7 @@ try {
               }}
             />
           </Box>
-          <Typography variant="h6" fontWeight="bold" sx={{ mt: 2 }}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mt: 2 }} >
             Compra Finalizada com Sucesso!
           </Typography>
         </DialogContent>

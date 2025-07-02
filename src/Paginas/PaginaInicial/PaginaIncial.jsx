@@ -47,7 +47,7 @@ function PaginaInicial() {
     const [preview, setPreview] = useState(null);
     const [anuncios, setAnuncios] = useState([]);
     const [termoPesquisa, setTermoPesquisa] = useState('');
-    const navegar = useNavigate();
+    const navigate = useNavigate();
 
     const acoes = [
         {
@@ -132,6 +132,8 @@ function PaginaInicial() {
             setFotoFile(null);
             setPreview(null);
             setAbrirModal(false);
+            navigate('/meusanuncio')
+            
         } catch (error) {
             console.error('Erro ao cadastrar anúncio:', error);
             toast.error('Erro ao cadastrar anúncio.');
@@ -203,7 +205,7 @@ function PaginaInicial() {
                                         cursor: 'pointer',
                                         minHeight: 400,
                                     }}
-                                    onClick={() => navegar('/anuncio', { state: { anuncio } })}
+                                    onClick={() => navigate('/anuncio', { state: { anuncio } })}
                                 >
                                     {anuncio.foto && (
                                         <CardMedia
